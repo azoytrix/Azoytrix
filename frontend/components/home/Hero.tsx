@@ -11,12 +11,13 @@ export default function Hero() {
     <section className="relative overflow-hidden bg-linear-to-b from-white via-white to-surface">
       <div className="bg-grid pointer-events-none absolute inset-0" />
 
-      <div className="relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl items-center gap-6 px-5 py-12 sm:px-8 lg:grid-cols-2">
+      <div className="relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl grid-cols-1 items-center gap-6 px-5 py-12 sm:px-8 lg:grid-cols-2">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-        >
+            className="min-w-0"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+          >
           <span className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-4 py-1.5 text-xs font-semibold tracking-widest text-brand">
             <span className="h-1.5 w-1.5 rounded-full bg-cyan" />
             SOFTWARE · AI · CLOUD
@@ -51,15 +52,15 @@ export default function Hero() {
           <p className="mt-10 text-xs tracking-[0.25em] text-muted">{SITE.pillars}</p>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.9, delay: 0.15, ease: "easeOut" }}
-          className="relative h-[380px] sm:h-[480px] lg:h-[620px]"
-        >
-          <div className="absolute inset-8 rounded-full bg-linear-to-br from-brand/10 via-cyan/10 to-transparent blur-3xl" />
-          <HeroVisual />
-        </motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, delay: 0.15, ease: "easeOut" }}
+            className="relative flex min-w-0 flex-col lg:h-170"
+          >
+            <div className="absolute inset-10 rounded-full bg-linear-to-br from-brand/10 via-cyan/10 to-transparent blur-3xl" />
+            <HeroVisual />
+          </motion.div>
       </div>
     </section>
   );
