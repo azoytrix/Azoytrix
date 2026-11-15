@@ -2,7 +2,7 @@ export const SITE = {
   name: "AZOYTRIX",
   tagline: "Engineering the Next Era.",
   pillars: "INNOVATION · INTELLIGENCE · ENGINEERING",
-  email: "hello@azoytrix.com", // change later
+  email: "azoytrix@gmail.com", // change later
 };
 
 export const NAV_LINKS = [

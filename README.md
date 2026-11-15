@@ -60,6 +60,20 @@ frontend/
 | `npm run start` | Start the production server |
 | `npm run lint` | Run ESLint |
 
+## Hero Chat Bot
+
+The hero section includes an AI-powered chat bot (`frontend/components/three/HeroScene.tsx`) backed by a rule-based response engine (`frontend/lib/bot/engine.ts`).
+
+### Features
+- **Idle greetings**: Cycles through default welcome messages until the visitor asks a question, then stops for good.
+- **Typed responses**: Answers type out character-by-character with a pulsing orb that reacts to speech activity.
+- **Context-aware**: Covers services, solutions, process, technology, portfolio, pricing, timelines, and contact info.
+- **Suggestion chips**: Follow-up prompts and quick links appear after each answer.
+
+### Recent fixes
+- **Response glitches**: Removed a duplicate idle-greeting loop that was fighting the active response loop, fixing flashing, early disappearance, and mixed default/chat responses.
+- **Mobile responsiveness**: Compact orb height on mobile (`h-[300px]`), minimum orb height floor, proper chat panel padding, and a max-height chat card with scroll on small screens.
+
 ## Contact
 
-hello@azoytrix.com
+azoytrix@gmail.com
