@@ -58,3 +58,49 @@ h1, h2, h3, h4 {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
+
+/* technology section on homepage css */
+
+/* ==========================================
+   AZOYTRIX - INFINITE TECHNOLOGY MARQUEE
+========================================== */
+
+.tech-marquee-container {
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.tech-marquee-track {
+  display: flex;
+  width: max-content;
+  flex-wrap: nowrap;
+  animation-name: azoytrix-marquee;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+/* Move exactly one complete technology group */
+@keyframes azoytrix-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pause on slider hover */
+.tech-marquee-container:hover .tech-marquee-track {
+  animation-play-state: paused;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .tech-marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
+}
