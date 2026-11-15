@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, Phone, MapPin, ArrowRight } from "lucide-react";
+import { Mail, MapPin, ArrowRight } from "lucide-react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Reveal from "@/components/ui/Reveal";
 import { ContactForm } from "@/components/contact/ContactForm";
@@ -85,11 +85,7 @@ export default function ContactPage() {
                   title: "Email",
                   subtitle: SITE.email,
                   href: `mailto:${SITE.email}`,
-                }, {
-                  icon: Phone,
-                  title: "Phone",
-                  subtitle: "+1 (555) 010-2030",
-                  href: "tel:+15550102030",
+
                 }, {
                   icon: MapPin,
                   title: "Location",
