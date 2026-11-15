@@ -4,12 +4,14 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import HeroVisual from "@/components/three/HeroVisual";
+import HeroParticles from "@/components/home/HeroParticles";
 import { SITE } from "@/lib/site";
 
 export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-linear-to-b from-white via-white to-surface">
       <div className="bg-grid pointer-events-none absolute inset-0" />
+      <HeroParticles />
 
       <div className="relative mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl grid-cols-1 items-center gap-6 px-5 py-12 sm:px-8 lg:grid-cols-2">
         <motion.div
