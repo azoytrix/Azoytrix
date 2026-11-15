@@ -36,7 +36,7 @@ export default function HeroParticles() {
     if (!ctx) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const count = window.innerWidth < 768 ? 40 : 70;
+    const count = window.innerWidth < 768 ? 80 : 150;
     const width = canvas.width;
     const height = canvas.height;
 
@@ -45,8 +45,8 @@ export default function HeroParticles() {
       p.y = Math.random() * h;
       p.vx = (Math.random() - 0.5) * 0.4;
       p.vy = reduceMotion ? 0 : 0.15 + Math.random() * 0.35;
-      p.radius = 0.8 + Math.random() * 2.2;
-      p.alpha = 0.1 + Math.random() * 0.35;
+      p.radius = 1.2 + Math.random() * 2.5;
+      p.alpha = 0.15 + Math.random() * 0.4;
       p.sway = Math.random() * Math.PI * 2;
       p.swaySpeed = 0.0015 + Math.random() * 0.003;
     };
