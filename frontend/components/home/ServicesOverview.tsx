@@ -1,38 +1,109 @@
+
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MoveUpRight } from "lucide-react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Reveal from "@/components/ui/Reveal";
 import { SERVICES } from "@/lib/data";
 
 export default function ServicesOverview() {
   return (
-    <section className="bg-surface py-24">
+    <section className="relative isolate overflow-hidden bg-surface py-24 sm:py-32">
+
+      {/* Background atmosphere */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -left-40 top-20 h-96 w-96 rounded-full bg-blue-100/50 blur-[120px]" />
+        <div className="absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-cyan-100/40 blur-[120px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(30,111,217,0.025)_1px,transparent_1px),linear-gradient(to_bottom,rgba(30,111,217,0.025)_1px,transparent_1px)] bg-size-[64px_64px]" />
+      </div>
+
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
+
         <SectionHeading
           eyebrow="What we do"
-          title="Six ways we engineer your growth"
-          description="From first idea to scaled platform, our services cover the full technology lifecycle."
+          title="Engineering the next generation of digital experiences."
+          description="Six specialized capabilities. One technology partner. From ambitious first ideas to intelligent, scalable platforms, we engineer solutions built for what comes next."
         />
 
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Services grid */}
+        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s, i) => (
             <Reveal key={s.title} delay={i * 0.07}>
-              <div className="group h-full rounded-2xl border border-line bg-white p-7 transition hover:-translate-y-1 hover:border-brand/40 hover:shadow-xl hover:shadow-brand/10">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-brand to-cyan text-white">
-                  <s.icon size={22} />
+              <article className="group relative flex h-full min-h-72 flex-col overflow-hidden rounded-2xl border border-white/80 bg-white/85 p-7 shadow-[0_8px_35px_rgba(15,35,70,0.035)] backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-brand/25 hover:shadow-[0_24px_60px_rgba(30,111,217,0.11)] sm:p-8">
+
+                {/* Hover background glow */}
+                <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-cyan-100/0 blur-3xl transition-all duration-700 group-hover:bg-cyan-100/80" />
+
+                {/* Top row */}
+                <div className="relative flex items-center justify-between">
+                  <span className="font-display text-sm font-semibold tracking-[0.2em] text-slate-300 transition-colors duration-300 group-hover:text-brand/70">
+                    0{i + 1}
+                  </span>
+
+                  <MoveUpRight
+                    size={19}
+                    className="text-slate-300 transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-brand"
+                  />
                 </div>
-                <h3 className="mt-5 text-lg font-bold text-navy">{s.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{s.text}</p>
-              </div>
+
+                {/* Icon */}
+                <div className="relative mt-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-brand/10 to-cyan/10 text-brand ring-1 ring-brand/10 transition-all duration-500 group-hover:scale-110 group-hover:from-brand group-hover:to-cyan group-hover:text-white group-hover:shadow-lg group-hover:shadow-brand/20">
+                  <s.icon size={25} strokeWidth={1.8} />
+                </div>
+
+                {/* Content */}
+                <div className="relative mt-7">
+                  <h3 className="font-display text-xl font-bold tracking-tight text-navy transition-colors duration-300 group-hover:text-brand">
+                    {s.title}
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-7 text-muted">
+                    {s.text}
+                  </p>
+                </div>
+
+                {/* Bottom accent */}
+                <div className="relative mt-auto pt-8">
+                  <div className="h-px w-full bg-slate-100 transition-colors duration-300 group-hover:bg-brand/20" />
+                  <div className="mt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-slate-400 transition-all duration-300 group-hover:gap-3 group-hover:text-brand">
+                    Our expertise
+                    <ArrowRight size={14} />
+                  </div>
+                </div>
+
+              </article>
             </Reveal>
           ))}
         </div>
 
-        <Reveal className="mt-10 text-center">
-          <Link href="/services" className="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline">
-            Explore all services <ArrowRight size={16} />
-          </Link>
+        {/* Bottom CTA */}
+        <Reveal className="mt-14">
+          <div className="relative overflow-hidden rounded-2xl border border-brand/10 bg-white p-7 shadow-[0_8px_35px_rgba(15,35,70,0.035)] sm:flex sm:items-center sm:justify-between sm:p-9">
+
+            <div className="pointer-events-none absolute -right-10 -top-24 h-64 w-64 rounded-full bg-blue-100/50 blur-[80px]" />
+
+            <div className="relative">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand">
+                Have something in mind?
+              </p>
+              <h3 className="mt-2 font-display text-xl font-bold text-navy sm:text-2xl">
+                Let's engineer your next big idea.
+              </h3>
+              <p className="mt-2 text-sm text-muted">
+                Explore our capabilities and discover what's possible.
+              </p>
+            </div>
+
+            <Link
+              href="/services"
+              className="relative mt-6 inline-flex shrink-0 items-center justify-center gap-3 rounded-full bg-navy px-6 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-brand hover:shadow-lg hover:shadow-brand/20 sm:mt-0"
+            >
+              Explore all services
+              <ArrowRight size={16} />
+            </Link>
+
+          </div>
         </Reveal>
+
       </div>
     </section>
   );
