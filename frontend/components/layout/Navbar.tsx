@@ -5,10 +5,67 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
-import { NAV_LINKS, SITE } from "@/lib/site";
 
-export default function Navbar() {
+import { useNavbar } from "@/hooks/useNavbar";
+import {
+  FALLBACK_NAVBAR,
+  type NavbarConfig,
+  type NavLink,
+} from "@/lib/navbar";
+
+interface NavbarProps {
+  /**
+   * Override the resolved navbar config.
+   * Useful for testing or for injecting CMS data directly without the hook.
+   */
+  config?: NavbarConfig;
+}
+
+function isExternalUrl(href: string): boolean {
+  return /^https?:\/\//i.test(href);
+}
+
+function renderNavLink({
+  link,
+  active,
+  mobile,
+}: {
+  link: NavLink;
+  active: boolean;
+  mobile: boolean;
+}) {
+  const common = "font-medium transition-colors block";
+  const cls = mobile
+    ? `rounded-lg px-3 py-3 text-base ${common} ${
+        active ? "bg-surface text-brand" : "text-navy"
+      }`
+    : `rounded-full px-4 py-2 text-sm ${common} ${
+        active ? "bg-surface text-brand" : "text-muted hover:text-navy"
+      }`;
+
+  if (link.external) {
+    return (
+      <a
+        href={link.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={cls}
+      >
+        {link.label}
+      </a>
+    );
+  }
+
+  return <Link href={link.href} className={cls}>{link.label}</Link>;
+}
+
+export default function Navbar({
+  config: configProp,
+}: NavbarProps = {}) {
   const pathname = usePathname();
+  const { config: cmsConfig } = useNavbar();
+  const config = configProp ?? cmsConfig ?? FALLBACK_NAVBAR;
+
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -21,6 +78,10 @@ export default function Navbar() {
 
   useEffect(() => setOpen(false), [pathname]);
 
+  const isActive = (href: string) => pathname === href;
+  const desktopLinks = config.links.filter((l) => l.href !== config.cta.href);
+  const logoIsExternal = isExternalUrl(config.logoUrl);
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 border-b transition-all ease-out ${
@@ -30,37 +91,43 @@ export default function Navbar() {
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:px-8">
-        <Link href="/" className="flex items-center gap-2.5" aria-label="Azoytrix home">
-          <Image src="/logo-mark.png" alt="" width={36} height={36} priority />
+        <Link
+          href="/"
+          className="flex items-center gap-2.5"
+          aria-label={`${config.siteName} home`}
+        >
+          <Image
+            src={config.logoUrl}
+            alt={config.logoAlt}
+            width={config.logoWidth}
+            height={config.logoHeight}
+            priority
+            unoptimized={logoIsExternal}
+          />
           <span className="font-display text-xl font-extrabold tracking-tight text-navy">
-            {SITE.name}
+            {config.siteName}
           </span>
         </Link>
 
         <ul className="hidden items-center gap-1 md:flex">
-          {NAV_LINKS.filter((l) => l.href !== "/contact").map((l) => {
-            const active = pathname === l.href;
-            return (
-              <li key={l.href}>
-                <Link
-                  href={l.href}
-                  className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                    active ? "bg-surface text-brand" : "text-muted hover:text-navy"
-                  }`}
-                >
-                  {l.label}
-                </Link>
-              </li>
-            );
-          })}
-          <li className="ml-2">
-            <Link
-              href="/contact"
-              className="rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand"
-            >
-              Contact Us
-            </Link>
-          </li>
+          {desktopLinks.map((link, i) => {
+              const active = isActive(link.href);
+              return (
+                <li key={`${link.href}-${i}`}>
+                  {renderNavLink({ link, active, mobile: false })}
+                </li>
+              );
+            })}
+          {config.cta.enabled && (
+            <li className="ml-2">
+              <Link
+                href={config.cta.href}
+                className="rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand"
+              >
+                {config.cta.label}
+              </Link>
+            </li>
+          )}
         </ul>
 
         <button
@@ -76,18 +143,14 @@ export default function Navbar() {
       {open && (
         <div className="border-t border-line bg-white md:hidden">
           <ul className="mx-auto flex max-w-7xl flex-col px-5 py-3">
-            {NAV_LINKS.map((l) => (
-              <li key={l.href}>
-                <Link
-                  href={l.href}
-                  className={`block rounded-lg px-3 py-3 text-base font-medium ${
-                    pathname === l.href ? "bg-surface text-brand" : "text-navy"
-                  }`}
-                >
-                  {l.label}
-                </Link>
-              </li>
-            ))}
+            {config.links.map((link, i) => {
+              const active = isActive(link.href);
+              return (
+                <li key={`${link.href}-${i}`}>
+                  {renderNavLink({ link, active, mobile: true })}
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

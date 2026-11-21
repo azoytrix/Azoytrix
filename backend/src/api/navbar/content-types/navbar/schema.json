@@ -1,0 +1,49 @@
+{
+  "kind": "singleType",
+  "collectionName": "navbars",
+  "info": {
+    "singularName": "navbar",
+    "pluralName": "navbars",
+    "displayName": "Navbar",
+    "description": "Global navbar configuration for the Azoytrix frontend."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "siteName": {
+      "type": "string",
+      "required": true,
+      "default": "AZOYTRIX",
+      "maxLength": 60
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "logoAlt": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "ctaEnabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "ctaLabel": {
+      "type": "string",
+      "default": "Contact Us",
+      "maxLength": 60
+    },
+    "ctaHref": {
+      "type": "string",
+      "default": "/contact",
+      "maxLength": 200
+    },
+    "navLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.nav-link"
+    }
+  }
+}
