@@ -9,7 +9,10 @@ import { SITE } from "@/lib/site";
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-linear-to-b from-white via-white to-surface">
+    <section
+        id="hero"
+        className="relative scroll-mt-20 overflow-hidden bg-linear-to-b from-white via-white to-surface"
+      >
       <div className="bg-grid pointer-events-none absolute inset-0" />
       {/* <HeroParticles /> */}
 

@@ -261,13 +261,22 @@ export default function Footer({ config: configProp }: FooterProps = {}) {
             ))}
           </p>
 
-          <Link
-            href="#"
-            className="group inline-flex items-center gap-2 text-[11px] font-medium text-slate-400 transition hover:text-teal-200"
-          >
-            {config.bottom.backToTopLabel}
-            <ArrowUpRight size={13} className="transition group-hover:-translate-y-1 group-hover:translate-x-1" />
-          </Link>
+          <button
+              type="button"
+              onClick={() => {
+                document.getElementById("hero")?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              }}
+              className="group inline-flex items-center gap-2 text-[11px] font-medium text-slate-400 transition hover:text-teal-200"
+            >
+              {config.bottom.backToTopLabel}
+              <ArrowUpRight
+                size={13}
+                className="transition group-hover:-translate-y-1 group-hover:translate-x-1"
+              />
+          </button>
         </div>
       </div>
     </footer>
