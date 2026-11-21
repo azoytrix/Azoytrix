@@ -1,10 +1,15 @@
 
 import SectionHeading from "@/components/ui/SectionHeading";
 import Reveal from "@/components/ui/Reveal";
-import { PRINCIPLES } from "@/lib/data";
+import GradientTitle from "@/components/ui/GradientTitle";
+import { FALLBACK_HOMEPAGE, type PrinciplesContent } from "@/lib/homepage";
 import { ArrowUpRight, Fingerprint } from "lucide-react";
 
-export default function Principles() {
+export default function Principles({
+  content = FALLBACK_HOMEPAGE.principles,
+}: {
+  content?: PrinciplesContent;
+}) {
   return (
     <section className="relative isolate overflow-hidden bg-white py-28 sm:py-36">
       {/* Background */}
@@ -22,22 +27,19 @@ export default function Principles() {
               <div className="mb-5 flex items-center gap-3">
                 <span className="h-px w-9 bg-brand" />
                 <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-brand">
-                  What drives us
+                  {content.eyebrow}
                 </span>
               </div>
 
               <h2 className="max-w-2xl font-display text-4xl font-bold leading-[1.12] tracking-tight text-navy sm:text-5xl lg:text-6xl">
-                The principles behind{" "}
-                <span className="text-gradient">every possibility.</span>
+                <GradientTitle text={content.title} highlight={content.titleHighlight} />
               </h2>
             </div>
           </Reveal>
 
           <Reveal delay={0.12}>
             <p className="max-w-md text-sm leading-8 text-muted lg:ml-auto">
-              Technology is only as meaningful as the thinking behind it.
-              These principles shape how we approach challenges, engineer
-              solutions and build lasting partnerships.
+              {content.description}
             </p>
           </Reveal>
         </div>
@@ -48,8 +50,8 @@ export default function Principles() {
           <div className="absolute left-0 right-0 top-0 hidden h-px bg-linear-to-r from-transparent via-brand/25 to-transparent md:block" />
 
           <div className="grid gap-0 md:grid-cols-3">
-            {PRINCIPLES.map((p, i) => (
-              <Reveal key={p.title} delay={i * 0.12}>
+            {content.items.map((p, i) => (
+              <Reveal key={`${p.title}-${i}`} delay={i * 0.12}>
                 <article className="group relative flex h-full flex-col border-b border-line py-9 first:pt-0 last:border-b-0 md:border-b-0 md:border-r md:px-8 md:first:pl-0 md:last:border-r-0 md:last:pr-0 md:pt-10">
                   {/* Number and icon */}
                   <div className="flex items-center justify-between">
@@ -86,7 +88,7 @@ export default function Principles() {
                   <div className="mt-9 flex items-center gap-3">
                     <span className="h-px w-6 bg-brand/40 transition-all duration-500 group-hover:w-12 group-hover:bg-brand" />
                     <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400">
-                      The Azoytrix mindset
+                      {content.mindsetLabel}
                     </span>
                   </div>
                 </article>
@@ -104,13 +106,13 @@ export default function Principles() {
             <div className="relative flex flex-col gap-7 sm:flex-row sm:items-center sm:justify-between">
               <div className="max-w-2xl">
                 <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-cyan-300">
-                  Our philosophy
+                  {content.philosophyLabel}
                 </span>
 
                 <h3 className="mt-4 font-display text-2xl font-bold leading-snug text-white sm:text-3xl">
-                  We don't just follow the future.
+                  {content.philosophyLine1}
                   <span className="block text-cyan-300">
-                    We engineer what's possible.
+                    {content.philosophyLine2}
                   </span>
                 </h3>
               </div>

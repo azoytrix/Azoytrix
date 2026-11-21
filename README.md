@@ -10,12 +10,12 @@ Azoytrix builds software, AI, cloud and digital innovation solutions.
 
 | Folder | What it is |
 |--------|------------|
-| [`./frontend`](./frontend) | Next.js website. Its **navbar (header)** and **footer** are editable from the CMS. |
-| [`./backend`](./backend) | Strapi headless CMS that stores the navbar and footer content and powers the admin panel. |
+| [`./frontend`](./frontend) | Next.js website. Its **navbar (header)**, **footer** and **homepage** are editable from the CMS. |
+| [`./backend`](./backend) | Strapi headless CMS that stores the navbar, footer and homepage content and powers the admin panel. |
 
 ### Quick start (run both)
 
-Start the backend first so the frontend can load the navbar and footer content:
+Start the backend first so the frontend can load the navbar, footer and homepage content:
 
 ```bash
 # Terminal 1: CMS
@@ -31,7 +31,7 @@ cp .env.example .env.local
 npm run dev            # http://localhost:3000
 ```
 
-If the backend is not running, the website still works. The navbar and footer simply show their built-in fallback content.
+If the backend is not running, the website still works. The navbar, footer and homepage simply show their built-in fallback content.
 
 ## Frontend
 
@@ -46,7 +46,7 @@ This repository includes the Azoytrix frontend, a Next.js application located in
 - **Forms:** React Hook Form, Zod
 - **Icons:** Lucide React
 - **Fonts:** Inter & Montserrat (via `next/font/google`)
-- **CMS integration:** Strapi REST API (navbar and footer)
+- **CMS integration:** Strapi REST API (navbar, footer and homepage)
 - **Language:** TypeScript
 
 ### Getting Started
@@ -74,7 +74,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the app.
 ```text
 frontend/
 ├── app/                # Next.js App Router pages
-│   ├── page.tsx        # Home page (Hero section)
+│   ├── page.tsx        # Home page (renders HomeSections)
 │   ├── layout.tsx      # Root layout (Navbar, Footer, metadata)
 │   ├── globals.css     # Tailwind imports & design tokens
 │   ├── about/          # About page (story, mission, principles)
@@ -83,21 +83,25 @@ frontend/
 │   ├── our-work/       # Portfolio / Our Work page
 │   └── contact/        # Contact page with form
 ├── components/
-│   ├── home/           # Homepage sections (Hero, Services, etc.)
+│   ├── home/           # Homepage sections (Hero, Services, etc.), driven by Strapi
+│   │   └── HomeSections.tsx  # Loads the homepage once and sets section order
 │   ├── layout/         # Navbar and Footer (both driven by Strapi)
-│   ├── ui/             # Shared UI (SectionHeading, Reveal, Counter)
+│   ├── ui/             # Shared UI (SectionHeading, Reveal, Counter, DynamicIcon, GradientTitle)
 │   ├── three/          # HeroScene, HeroVisual (3D graphics)
 │   ├── contact/        # ContactForm (React Hook Form + Zod)
 │   └── about/          # CuteRobotModel, RobotCTA (3D dodge robot)
 ├── hooks/
 │   ├── useNavbar.ts    # Loads the navbar from Strapi
-│   └── useFooter.ts    # Loads the footer from Strapi
+│   ├── useFooter.ts    # Loads the footer from Strapi
+│   └── useHomepage.ts  # Loads the homepage from Strapi
 ├── lib/
 │   ├── strapi.ts       # Strapi fetch helper and image URL helper
 │   ├── navbar.ts       # Navbar types, fallback content, Strapi mapper
 │   ├── footer.ts       # Footer types, fallback content, Strapi mapper
+│   ├── homepage.ts     # Homepage types, fallback content, Strapi mapper
+│   ├── icons.ts        # Icon names that can be chosen in Strapi
 │   ├── site.ts         # Static site constants
-│   ├── data.ts         # Site content (services, solutions, portfolio, etc.)
+│   ├── data.ts         # Content for the other pages (services, solutions, portfolio, etc.)
 │   └── bot/engine.ts   # Rule-based chat bot engine
 ├── public/
 │   └── models/         # 3D GLB models (robot.glb, bumble.glb)
@@ -111,7 +115,7 @@ frontend/
 
 | Route | Page | Description |
 |-------|------|-------------|
-| `/` | Home | Hero, brand statement, services overview, solutions, process, tech stack, portfolio, stats, principles, CTA |
+| `/` | Home | Hero, brand statement, services overview, solutions, process, tech stack, portfolio, stats, principles, CTA (all editable in Strapi) |
 | `/about` | About | Company story, mission & beliefs, Azoytrix difference, closing CTA with dodging 3D robot |
 | `/services` | Services | Six specialised capability cards with explore links |
 | `/solutions` | Solutions | Business automation, analytics, cloud, product platform cards |
@@ -131,39 +135,61 @@ The About page CTA includes a 3D robot that dodges your mouse cursor. Place a GL
 | `npm run start` | Start the production server |
 | `npm run lint` | Run ESLint |
 
-## CMS-driven Navbar and Footer
+## CMS-driven Navbar, Footer and Homepage
 
-The header and footer content is managed in Strapi, so it can be changed without editing code or redeploying the frontend.
+The header, footer and homepage content is managed in Strapi, so it can be changed without editing code or redeploying the frontend.
 
 ### How it works
 
 1. The frontend shows built-in fallback content immediately.
-2. In the browser, `useNavbar` / `useFooter` request the content from Strapi.
-3. When Strapi responds, a mapper (`lib/navbar.ts`, `lib/footer.ts`) converts it and the component updates.
+2. In the browser, `useNavbar` / `useFooter` / `useHomepage` request the content from Strapi.
+3. When Strapi responds, a mapper (`lib/navbar.ts`, `lib/footer.ts`, `lib/homepage.ts`) converts it and the components update.
 4. If Strapi is unreachable, or a field is empty, the fallback value is used, so the site never breaks.
 
-| | Navbar (header) | Footer |
-|---|---|---|
-| Frontend component | `frontend/components/layout/Navbar.tsx` | `frontend/components/layout/Footer.tsx` |
-| Frontend hook | `frontend/hooks/useNavbar.ts` | `frontend/hooks/useFooter.ts` |
-| Strapi content type | Single type `Navbar` | Single type `Footer` |
-| Public endpoint | `GET /api/navbar` | `GET /api/footer` |
+| | Navbar (header) | Footer | Homepage |
+|---|---|---|---|
+| Frontend component | `components/layout/Navbar.tsx` | `components/layout/Footer.tsx` | `components/home/HomeSections.tsx` + 11 sections |
+| Frontend hook | `hooks/useNavbar.ts` | `hooks/useFooter.ts` | `hooks/useHomepage.ts` |
+| Strapi content type | Single type `Navbar` | Single type `Footer` | Single type `Homepage` |
+| Public endpoint | `GET /api/navbar` | `GET /api/footer` | `GET /api/homepage` |
 
-Both components are client components (`"use client"`), which matches `cacheComponents: true` in `next.config.ts`. Visitors may briefly see the fallback content before the CMS content loads.
+These components are client components (`"use client"`), which matches `cacheComponents: true` in `next.config.ts`. Visitors may briefly see the fallback content before the CMS content loads.
 
 ### What editors can change
 
 - **Navbar:** site name, logo and alt text, navigation links (label, URL, external, new tab), and the call-to-action button.
 - **Footer:** brand text and logo, the large "Let's create what's next" section, the Explore links, the "Get in touch" card and email, the copyright text, the bottom tag words, and the "Back to top" label.
+- **Homepage:** every section, one group at a time, in page order.
+
+| # | Strapi group | Website section |
+|---|--------------|-----------------|
+| 1 | Hero | Top banner with title, buttons and pillars |
+| 2 | Brand Statement | "Who we are" statement and capability pills |
+| 3 | Services | "What we do" cards and call-to-action |
+| 4 | Solutions | Solutions intro, button and cards |
+| 5 | Why | "Why Azoytrix" cards and closing line |
+| 6 | Tech | Technology domains and their tools |
+| 7 | Process | "How we work" steps |
+| 8 | Portfolio | "Selected work" project cards |
+| 9 | Stats | Numbers section |
+| 10 | Principles | Principle pillars and philosophy banner |
+| 11 | Cta | Closing banner with buttons and email |
 
 ### Editing content
 
 1. Start the backend and open [http://localhost:1337/admin](http://localhost:1337/admin).
-2. Go to **Content Manager → Navbar** or **Footer** (under Single Types).
-3. Edit the fields and click **Save**. No publish step is needed.
+2. Go to **Content Manager → Navbar**, **Footer** or **Homepage** (under Single Types).
+3. On the Homepage, expand the section you want, edit its fields and click **Save**. No publish step is needed.
 4. Refresh the website to see the change. No frontend rebuild is required.
 
-When adding a link with **Add an entry**, change the default `Link` / `/` values before saving, or delete the entry. Otherwise a stray "Link" item appears in the navbar.
+**Good to know**
+
+- **Empty means default.** Clearing a text field on the Homepage brings back the original text, and deleting every card in a list brings back the default cards.
+- When adding a card with **Add an entry**, fill in at least its title, because cards without one are ignored. For navbar and footer links, change the default `Link` / `/` values before saving, or delete the entry. Otherwise a stray "Link" item appears.
+- Tech tools and capability pills are typed one per line.
+- Icons and portfolio gradients are chosen from dropdowns.
+
+**Not managed by the CMS:** the 3D hero scene and chat bot, the 3D building in the closing banner, and the other pages (`/about`, `/services`, `/solutions`, `/our-work`, `/contact`). Editing the homepage cards does not change those pages.
 
 See [`frontend/README.md`](./frontend/README.md) and [`backend/README.md`](./backend/README.md) for field lists, file layout and troubleshooting.
 
@@ -193,8 +219,8 @@ The admin panel and API run at [http://localhost:1337](http://localhost:1337). A
 
 On startup, `src/index.ts` automatically:
 
-- gives the **Public** role read (`find`) access to the navbar and footer, and
-- creates default navbar and footer content if none exists yet (existing content is never overwritten).
+- gives the **Public** role read (`find`) access to the navbar, footer and homepage, and
+- creates default navbar, footer and homepage content if none exists yet (existing content is never overwritten).
 
 ### Project Structure
 
@@ -203,9 +229,13 @@ backend/
 ├── src/
 │   ├── api/
 │   │   ├── navbar/        # Navbar single type (schema, controller, service, routes)
-│   │   └── footer/        # Footer single type (schema, controller, service, routes)
+│   │   ├── footer/        # Footer single type (schema, controller, service, routes)
+│   │   └── homepage/      # Homepage single type (schema, controller, service, routes)
 │   ├── components/
-│   │   └── shared/        # nav-link.json, footer-tag.json (reusable components)
+│   │   ├── shared/        # nav-link.json, footer-tag.json (reusable components)
+│   │   └── home/          # Homepage section and card components (16 files)
+│   ├── seed/
+│   │   └── homepage.ts    # Default homepage content
 │   ├── admin/             # Admin panel customizations
 │   ├── extensions/        # Strapi plugin extensions
 │   └── index.ts           # Public permissions + default content seeding
@@ -231,6 +261,7 @@ backend/
 |----------|--------|-------------|
 | `GET /api/navbar` | Public, read-only | Navbar content (logo and links included) |
 | `GET /api/footer` | Public, read-only | Footer content (logo, links and tags included) |
+| `GET /api/homepage` | Public, read-only | All 11 homepage sections with their cards and lists |
 
 A `403` response means the Public role is missing the `find` permission. Restart Strapi so `src/index.ts` grants it. A `404` means the content type did not load or has no entry.
 
@@ -277,7 +308,7 @@ The following are intentionally **not committed**: `node_modules/`, `dist/`, `.s
 
 ## Hero Chat Bot
 
-The hero section includes an AI-powered chat bot (`frontend/components/three/HeroScene.tsx`) backed by a rule-based response engine (`frontend/lib/bot/engine.ts`).
+The hero section includes an AI-powered chat bot (`frontend/components/three/HeroScene.tsx`) backed by a rule-based response engine (`frontend/lib/bot/engine.ts`). The bot is not managed by the CMS.
 
 ### Features
 
@@ -288,7 +319,8 @@ The hero section includes an AI-powered chat bot (`frontend/components/three/Her
 
 ### Recent changes
 
-- **CMS-managed navbar and footer**: Both are now loaded from Strapi (single types `Navbar` and `Footer`) with built-in fallbacks, replacing the hardcoded content.
+- **CMS-managed homepage**: All 11 homepage sections (Hero through the closing banner) are now loaded from a single Strapi `Homepage` type, with built-in fallbacks that match the original design.
+- **CMS-managed navbar and footer**: Both are loaded from Strapi (single types `Navbar` and `Footer`) with built-in fallbacks, replacing the hardcoded content.
 - **Response glitches**: Removed a duplicate idle-greeting loop that was fighting the active response loop, fixing flashing, early disappearance, and mixed default/chat responses.
 - **Mobile responsiveness**: Compact orb height on mobile (`h-[300px]`), minimum orb height floor, proper chat panel padding, and a max-height chat card with scroll on small screens.
 - **Background particles**: Subtle cyan snow-like particles floating across the full hero background (`HeroParticles.tsx`), respecting `prefers-reduced-motion`.
@@ -297,7 +329,9 @@ The hero section includes an AI-powered chat bot (`frontend/components/three/Her
 
 | Symptom | Fix |
 |---------|-----|
-| Navbar or footer shows old or default content | Open `http://localhost:1337/api/navbar` and `/api/footer` and check the status. `403` means permission, `404` means missing entry. Also confirm `frontend/.env.local` exists and restart the frontend. |
+| Navbar, footer or homepage shows old or default content | Open `http://localhost:1337/api/navbar`, `/api/footer` and `/api/homepage` and check the status. `403` means permission, `404` means missing entry. Also confirm `frontend/.env.local` exists and restart the frontend. |
+| A homepage section keeps showing the default text | The Strapi field is empty, which means "use the default". Fill it in and Save. |
+| A homepage card does not appear | Cards without a title are ignored. Fill it in. |
 | A link named "Link" appears in the navbar | A link was added in Strapi without editing it. Change its label and URL, or delete it. |
 | Strapi fails with `Unexpected end of JSON input` | A `schema.json` file is empty. Restore it from git and restart (see `backend/README.md`). |
 | `"use client" directive must be placed before other expressions` | Leftover code sits above `"use client"` in the file. The directive must be the first line. |

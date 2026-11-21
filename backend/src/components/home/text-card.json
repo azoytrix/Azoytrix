@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_home_text_cards",
+  "info": {
+    "displayName": "TextCard",
+    "description": "A card with a title and text (principles)."
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "text": {
+      "type": "text",
+      "maxLength": 300
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "collectionName": "components_home_process_sections",
+  "info": {
+    "displayName": "ProcessSection",
+    "description": "Process timeline: heading, steps and closing statement."
+  },
+  "options": {},
+  "attributes": {
+    "eyebrow": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "titleHighlight": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "steps": {
+      "type": "component",
+      "repeatable": true,
+      "component": "home.icon-card"
+    },
+    "phaseLabel": {
+      "type": "string",
+      "maxLength": 30
+    },
+    "closingEyebrow": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "closingTitle": {
+      "type": "string",
+      "maxLength": 160
+    }
+  }
+}

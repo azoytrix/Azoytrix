@@ -1,10 +1,16 @@
 
 import SectionHeading from "@/components/ui/SectionHeading";
+import GradientTitle from "@/components/ui/GradientTitle";
 import Reveal from "@/components/ui/Reveal";
-import { WHY } from "@/lib/data";
+import DynamicIcon from "@/components/ui/DynamicIcon";
+import { FALLBACK_HOMEPAGE, type WhyContent } from "@/lib/homepage";
 import { ArrowUpRight } from "lucide-react";
 
-export default function WhyAzoytrix() {
+export default function WhyAzoytrix({
+  content = FALLBACK_HOMEPAGE.why,
+}: {
+  content?: WhyContent;
+}) {
   return (
     <section className="relative isolate overflow-hidden bg-surface py-24 sm:py-32">
 
@@ -20,16 +26,16 @@ export default function WhyAzoytrix() {
 
         {/* Section heading */}
         <SectionHeading
-          eyebrow="Why Azoytrix"
-          title="A technology partner built for the long run."
-          description="Great technology is more than code. It's about building meaningful partnerships, delivering lasting value and creating solutions that grow with your ambitions."
+          eyebrow={content.eyebrow}
+          title={<GradientTitle text={content.title} highlight={content.titleHighlight} />}
+          description={content.description}
         />
 
         {/* Feature cards */}
         <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
 
-          {WHY.map((w, i) => (
-            <Reveal key={w.title} delay={i * 0.09}>
+          {content.items.map((w, i) => (
+            <Reveal key={`${w.title}-${i}`} delay={i * 0.09}>
               <article className="group relative flex h-full min-h-72 flex-col overflow-hidden rounded-2xl border border-white/80 bg-white/85 p-7 shadow-[0_8px_35px_rgba(15,35,70,0.035)] backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-brand/30 hover:shadow-[0_24px_55px_rgba(30,111,217,0.11)]">
 
                 {/* Decorative number */}
@@ -43,7 +49,7 @@ export default function WhyAzoytrix() {
                 {/* Top row */}
                 <div className="relative flex items-center justify-between">
                   <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-brand/10 to-cyan/10 text-brand ring-1 ring-brand/10 transition-all duration-500 group-hover:scale-110 group-hover:from-brand group-hover:to-cyan group-hover:text-white group-hover:shadow-lg group-hover:shadow-brand/20">
-                    <w.icon size={25} strokeWidth={1.8} />
+                    <DynamicIcon name={w.icon} size={25} strokeWidth={1.8} />
                   </div>
 
                   <ArrowUpRight
@@ -79,10 +85,10 @@ export default function WhyAzoytrix() {
           <div className="mt-12 flex flex-col items-center justify-between gap-5 rounded-2xl border border-brand/10 bg-white/75 p-7 text-center backdrop-blur-sm sm:flex-row sm:text-left sm:p-9">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand">
-                The Azoytrix approach
+                {content.closingEyebrow}
               </p>
               <h3 className="mt-2 font-display text-xl font-bold text-navy sm:text-2xl">
-                Think beyond technology. Build for impact.
+                {content.closingTitle}
               </h3>
             </div>
 

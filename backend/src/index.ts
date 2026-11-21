@@ -1,12 +1,15 @@
 import type { Core } from '@strapi/strapi';
+import { HOMEPAGE_SEED } from './seed/homepage';
 
 const NAVBAR_UID = 'api::navbar.navbar' as any;
 const FOOTER_UID = 'api::footer.footer' as any;
+const HOMEPAGE_UID = 'api::homepage.homepage' as any;
 
 /** Public role may read these single types over REST. */
 const PUBLIC_FIND_ACTIONS = [
   'api::navbar.navbar.find',
   'api::footer.footer.find',
+  'api::homepage.homepage.find',
 ];
 
 const DEFAULT_NAVBAR = {
@@ -45,7 +48,7 @@ export default {
   register() {},
 
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
-    // 1) Let the Public role read the navbar and footer
+    // 1) Let the Public role read the navbar, footer and homepage
     const publicRole = await strapi.db
       .query('plugin::users-permissions.role')
       .findOne({ where: { type: 'public' } });
@@ -76,6 +79,12 @@ export default {
     if (!footer) {
       await strapi.documents(FOOTER_UID).create({ data: DEFAULT_FOOTER });
       strapi.log.info('Seeded default footer content');
+    }
+
+    const homepage = await strapi.documents(HOMEPAGE_UID).findFirst();
+    if (!homepage) {
+      await strapi.documents(HOMEPAGE_UID).create({ data: HOMEPAGE_SEED });
+      strapi.log.info('Seeded default homepage content');
     }
   },
 };

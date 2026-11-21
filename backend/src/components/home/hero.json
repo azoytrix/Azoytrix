@@ -1,0 +1,50 @@
+{
+  "collectionName": "components_home_heroes",
+  "info": {
+    "displayName": "Hero",
+    "description": "Top hero section (title, buttons, pillars)."
+  },
+  "options": {},
+  "attributes": {
+    "badge": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "headingLine1": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "headingLine2": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "headingHighlight": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 400
+    },
+    "primaryCtaLabel": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "primaryCtaHref": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "secondaryCtaLabel": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "secondaryCtaHref": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "pillars": {
+      "type": "string",
+      "maxLength": 120
+    }
+  }
+}

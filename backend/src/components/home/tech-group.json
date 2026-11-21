@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_home_tech_groups",
+  "info": {
+    "displayName": "TechGroup",
+    "description": "A technology domain with its tools (one per line)."
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "items": {
+      "type": "text",
+      "maxLength": 400
+    }
+  }
+}

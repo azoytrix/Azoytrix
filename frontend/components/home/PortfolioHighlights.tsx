@@ -2,10 +2,15 @@
 import Link from "next/link";
 import { ArrowUpRight, ArrowRight, Layers3 } from "lucide-react";
 import SectionHeading from "@/components/ui/SectionHeading";
+import GradientTitle from "@/components/ui/GradientTitle";
 import Reveal from "@/components/ui/Reveal";
-import { PORTFOLIO } from "@/lib/data";
+import { FALLBACK_HOMEPAGE, PORTFOLIO_GRADIENTS, type PortfolioContent } from "@/lib/homepage";
 
-export default function PortfolioHighlights() {
+export default function PortfolioHighlights({
+  content = FALLBACK_HOMEPAGE.portfolio,
+}: {
+  content?: PortfolioContent;
+}) {
   return (
     <section className="relative isolate overflow-hidden bg-white py-24 sm:py-32">
       {/* Background atmosphere */}
@@ -17,24 +22,19 @@ export default function PortfolioHighlights() {
 
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <SectionHeading
-          eyebrow="Selected work"
-          title={
-            <>
-              Ideas transformed into{" "}
-              <span className="text-gradient">digital experiences.</span>
-            </>
-          }
-          description="Explore the kinds of intelligent products, platforms and digital experiences we're building for what's next."
+          eyebrow={content.eyebrow}
+          title={<GradientTitle text={content.title} highlight={content.titleHighlight} />}
+          description={content.description}
         />
 
         {/* Portfolio cards */}
         <div className="mt-16 grid gap-7 md:grid-cols-2 lg:grid-cols-3">
-          {PORTFOLIO.map((p, i) => (
-            <Reveal key={p.title} delay={i * 0.09}>
+          {content.projects.map((p, i) => (
+            <Reveal key={`${p.title}-${i}`} delay={i * 0.09}>
               <article className="group relative h-full overflow-hidden rounded-2xl border border-line/80 bg-white shadow-[0_8px_35px_rgba(15,35,70,0.035)] transition-all duration-500 hover:-translate-y-2 hover:border-brand/30 hover:shadow-[0_24px_55px_rgba(30,111,217,0.12)]">
                 {/* Project visual */}
                 <div
-                  className={`relative h-56 overflow-hidden bg-linear-to-br ${p.from} ${p.to}`}
+                  className={`relative h-56 overflow-hidden bg-linear-to-br ${PORTFOLIO_GRADIENTS[p.gradient] ?? PORTFOLIO_GRADIENTS.brand_cyan}`}
                 >
                   <div className="bg-grid absolute inset-0 opacity-50" />
 
@@ -43,7 +43,7 @@ export default function PortfolioHighlights() {
 
                   <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-white/30 bg-white/20 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white shadow-sm backdrop-blur-md">
                     <span className="h-1.5 w-1.5 rounded-full bg-white" />
-                    Featured project
+                    {content.badgeLabel}
                   </div>
 
                   <span className="absolute bottom-4 left-5 font-display text-6xl font-bold text-white/20 transition-transform duration-700 group-hover:scale-110">
@@ -74,7 +74,7 @@ export default function PortfolioHighlights() {
 
                   <div className="mt-7 flex items-center justify-between border-t border-slate-100 pt-5">
                     <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">
-                      Azoytrix / Portfolio
+                      {content.footerLabel}
                     </span>
                     <ArrowRight
                       size={17}
@@ -100,19 +100,19 @@ export default function PortfolioHighlights() {
 
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand">
-                    More about what we build
+                    {content.ctaEyebrow}
                   </p>
                   <h3 className="mt-2 font-display text-xl font-bold text-navy sm:text-2xl">
-                    Your next big idea could be our next project.
+                    {content.ctaTitle}
                   </h3>
                 </div>
               </div>
 
               <Link
-                href="/our-work"
+                href={content.ctaHref}
                 className="inline-flex shrink-0 items-center gap-3 rounded-xl bg-navy px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-navy/15 transition-all duration-300 hover:-translate-y-1 hover:bg-brand hover:shadow-brand/20"
               >
-                Explore our work
+                {content.ctaLabel}
                 <ArrowUpRight size={17} />
               </Link>
             </div>

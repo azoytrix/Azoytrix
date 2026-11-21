@@ -1,0 +1,55 @@
+{
+  "collectionName": "components_home_portfolio_sections",
+  "info": {
+    "displayName": "PortfolioSection",
+    "description": "Portfolio highlights: heading, projects and call-to-action."
+  },
+  "options": {},
+  "attributes": {
+    "eyebrow": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "titleHighlight": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "projects": {
+      "type": "component",
+      "repeatable": true,
+      "component": "home.portfolio-card"
+    },
+    "badgeLabel": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "footerLabel": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "ctaEyebrow": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "ctaTitle": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "ctaLabel": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "ctaHref": {
+      "type": "string",
+      "maxLength": 200
+    }
+  }
+}

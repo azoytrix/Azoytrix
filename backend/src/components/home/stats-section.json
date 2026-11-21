@@ -1,0 +1,39 @@
+{
+  "collectionName": "components_home_stats_sections",
+  "info": {
+    "displayName": "StatsSection",
+    "description": "Dark stats section: heading, numbers and footer line."
+  },
+  "options": {},
+  "attributes": {
+    "eyebrow": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "titleHighlight": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "home.stat"
+    },
+    "footerLabel": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "footerCode": {
+      "type": "string",
+      "maxLength": 80
+    }
+  }
+}
