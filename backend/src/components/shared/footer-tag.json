@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_shared_footer_tags",
+  "info": {
+    "displayName": "FooterTag",
+    "description": "A short word shown in the footer bottom bar (e.g. Innovation)"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true,
+      "default": "Tag",
+      "minLength": 1,
+      "maxLength": 40
+    }
+  }
+}

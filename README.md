@@ -6,6 +6,33 @@ Azoytrix builds software, AI, cloud and digital innovation solutions.
 
 **Innovation · Intelligence · Engineering**
 
+## Repository Overview
+
+| Folder | What it is |
+|--------|------------|
+| [`./frontend`](./frontend) | Next.js website. Its **navbar (header)** and **footer** are editable from the CMS. |
+| [`./backend`](./backend) | Strapi headless CMS that stores the navbar and footer content and powers the admin panel. |
+
+### Quick start (run both)
+
+Start the backend first so the frontend can load the navbar and footer content:
+
+```bash
+# Terminal 1: CMS
+cd backend
+npm install
+cp .env.example .env   # then set secrets and database values
+npm run dev            # http://localhost:1337/admin
+
+# Terminal 2: website
+cd frontend
+npm install
+cp .env.example .env.local
+npm run dev            # http://localhost:3000
+```
+
+If the backend is not running, the website still works. The navbar and footer simply show their built-in fallback content.
+
 ## Frontend
 
 This repository includes the Azoytrix frontend, a Next.js application located in [`./frontend`](./frontend).
@@ -19,6 +46,7 @@ This repository includes the Azoytrix frontend, a Next.js application located in
 - **Forms:** React Hook Form, Zod
 - **Icons:** Lucide React
 - **Fonts:** Inter & Montserrat (via `next/font/google`)
+- **CMS integration:** Strapi REST API (navbar and footer)
 - **Language:** TypeScript
 
 ### Getting Started
@@ -26,10 +54,20 @@ This repository includes the Azoytrix frontend, a Next.js application located in
 ```bash
 cd frontend
 npm install
+cp .env.example .env.local
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view the app.
+
+### Environment Variables (`frontend/.env.local`)
+
+| Variable | Description |
+|----------|-------------|
+| `NEXT_PUBLIC_STRAPI_URL` | Public URL of the Strapi backend (default `http://localhost:1337`) |
+| `NEXT_PUBLIC_STRAPI_API_TOKEN` | Optional. Only needed if the Strapi endpoints are protected by an API token |
+
+`NEXT_PUBLIC_*` values are read at startup, so restart `npm run dev` after changing them.
 
 ### Project Structure
 
@@ -46,16 +84,24 @@ frontend/
 │   └── contact/        # Contact page with form
 ├── components/
 │   ├── home/           # Homepage sections (Hero, Services, etc.)
-│   ├── layout/         # Navbar, Footer, CopyrightYear
+│   ├── layout/         # Navbar and Footer (both driven by Strapi)
 │   ├── ui/             # Shared UI (SectionHeading, Reveal, Counter)
 │   ├── three/          # HeroScene, HeroVisual (3D graphics)
 │   ├── contact/        # ContactForm (React Hook Form + Zod)
 │   └── about/          # CuteRobotModel, RobotCTA (3D dodge robot)
+├── hooks/
+│   ├── useNavbar.ts    # Loads the navbar from Strapi
+│   └── useFooter.ts    # Loads the footer from Strapi
 ├── lib/
-│   ├── site.ts         # Site config (name, tagline, nav links)
-│   └── data.ts         # Site content (services, solutions, portfolio, etc.)
+│   ├── strapi.ts       # Strapi fetch helper and image URL helper
+│   ├── navbar.ts       # Navbar types, fallback content, Strapi mapper
+│   ├── footer.ts       # Footer types, fallback content, Strapi mapper
+│   ├── site.ts         # Static site constants
+│   ├── data.ts         # Site content (services, solutions, portfolio, etc.)
+│   └── bot/engine.ts   # Rule-based chat bot engine
 ├── public/
 │   └── models/         # 3D GLB models (robot.glb, bumble.glb)
+├── .env.example        # Strapi URL / token variables
 ├── next.config.ts
 ├── tailwind.config.*
 └── package.json
@@ -85,6 +131,42 @@ The About page CTA includes a 3D robot that dodges your mouse cursor. Place a GL
 | `npm run start` | Start the production server |
 | `npm run lint` | Run ESLint |
 
+## CMS-driven Navbar and Footer
+
+The header and footer content is managed in Strapi, so it can be changed without editing code or redeploying the frontend.
+
+### How it works
+
+1. The frontend shows built-in fallback content immediately.
+2. In the browser, `useNavbar` / `useFooter` request the content from Strapi.
+3. When Strapi responds, a mapper (`lib/navbar.ts`, `lib/footer.ts`) converts it and the component updates.
+4. If Strapi is unreachable, or a field is empty, the fallback value is used, so the site never breaks.
+
+| | Navbar (header) | Footer |
+|---|---|---|
+| Frontend component | `frontend/components/layout/Navbar.tsx` | `frontend/components/layout/Footer.tsx` |
+| Frontend hook | `frontend/hooks/useNavbar.ts` | `frontend/hooks/useFooter.ts` |
+| Strapi content type | Single type `Navbar` | Single type `Footer` |
+| Public endpoint | `GET /api/navbar` | `GET /api/footer` |
+
+Both components are client components (`"use client"`), which matches `cacheComponents: true` in `next.config.ts`. Visitors may briefly see the fallback content before the CMS content loads.
+
+### What editors can change
+
+- **Navbar:** site name, logo and alt text, navigation links (label, URL, external, new tab), and the call-to-action button.
+- **Footer:** brand text and logo, the large "Let's create what's next" section, the Explore links, the "Get in touch" card and email, the copyright text, the bottom tag words, and the "Back to top" label.
+
+### Editing content
+
+1. Start the backend and open [http://localhost:1337/admin](http://localhost:1337/admin).
+2. Go to **Content Manager → Navbar** or **Footer** (under Single Types).
+3. Edit the fields and click **Save**. No publish step is needed.
+4. Refresh the website to see the change. No frontend rebuild is required.
+
+When adding a link with **Add an entry**, change the default `Link` / `/` values before saving, or delete the entry. Otherwise a stray "Link" item appears in the navbar.
+
+See [`frontend/README.md`](./frontend/README.md) and [`backend/README.md`](./backend/README.md) for field lists, file layout and troubleshooting.
+
 ## Backend
 
 This repository includes the Azoytrix backend, a [Strapi](https://strapi.io) headless CMS located in [`./backend`](./backend). Strapi provides the content API, admin panel, and authentication that power the frontend.
@@ -92,9 +174,9 @@ This repository includes the Azoytrix backend, a [Strapi](https://strapi.io) hea
 ### Tech Stack
 
 - **Framework:** Strapi 5 (TypeScript)
-- **Database:** SQLite by default, configurable to MySQL or PostgreSQL
+- **Database:** MySQL in this project (`DATABASE_CLIENT=mysql`, driver `mysql2`). Strapi's config also supports PostgreSQL and SQLite.
 - **Authentication:** Users & Permissions plugin (JWT, refresh-token management)
-- **Media Upload:** Strapi Upload plugin with allowed/denied media types
+- **Media Upload:** Strapi Upload plugin with allowed/denied media types (SVG uploads are blocked, so use PNG or JPG for logos)
 - **Language:** TypeScript
 - **Node:** `>=22.0.0 <=26.x.x`
 
@@ -107,32 +189,50 @@ cp .env.example .env   # adjust values as needed
 npm run dev
 ```
 
-The admin panel and API run at [http://localhost:1337](http://localhost:1337).
+The admin panel and API run at [http://localhost:1337](http://localhost:1337). Admin panel: [http://localhost:1337/admin](http://localhost:1337/admin).
+
+On startup, `src/index.ts` automatically:
+
+- gives the **Public** role read (`find`) access to the navbar and footer, and
+- creates default navbar and footer content if none exists yet (existing content is never overwritten).
 
 ### Project Structure
 
 ```text
 backend/
 ├── src/
-│   ├── api/           # API route & content-type definitions (none defined yet)
-│   ├── admin/         # Admin panel customizations
-│   ├── extensions/    # Strapi plugin extensions
-│   └── index.ts       # Entry point
-├── config/            # Strapi configuration
-│   ├── database.ts    # Database client (mysql/postgres/sqlite)
-│   ├── server.ts      # Host, port, app keys
-│   ├── plugins.ts     # Upload & users-permissions plugin config
+│   ├── api/
+│   │   ├── navbar/        # Navbar single type (schema, controller, service, routes)
+│   │   └── footer/        # Footer single type (schema, controller, service, routes)
+│   ├── components/
+│   │   └── shared/        # nav-link.json, footer-tag.json (reusable components)
+│   ├── admin/             # Admin panel customizations
+│   ├── extensions/        # Strapi plugin extensions
+│   └── index.ts           # Public permissions + default content seeding
+├── config/                # Strapi configuration
+│   ├── database.ts        # Database client (mysql/postgres/sqlite)
+│   ├── server.ts          # Host, port, app keys
+│   ├── plugins.ts         # Upload & users-permissions plugin config
 │   ├── api.ts
-│   └── middlewares.ts
-├── database/          # Migrations (gitignored)
-├── public/            # Static assets
-├── dist/              # Build output (gitignored)
-├── .env.example       # Example environment variables
-├── .env               # Local environment (gitignored)
+│   └── middlewares.ts     # Includes CORS
+├── database/              # Migrations (gitignored)
+├── public/                # Static assets
+├── dist/                  # Build output (gitignored)
+├── .env.example           # Example environment variables
+├── .env                   # Local environment (gitignored)
 ├── package.json
 ├── tsconfig.json
-└── README.md          # Strapi getting-started guide
+└── README.md              # Backend CMS guide
 ```
+
+### API Endpoints
+
+| Endpoint | Access | Description |
+|----------|--------|-------------|
+| `GET /api/navbar` | Public, read-only | Navbar content (logo and links included) |
+| `GET /api/footer` | Public, read-only | Footer content (logo, links and tags included) |
+
+A `403` response means the Public role is missing the `find` permission. Restart Strapi so `src/index.ts` grants it. A `404` means the content type did not load or has no entry.
 
 ### Available Scripts (run from `./backend`)
 
@@ -157,12 +257,23 @@ Copy `.env.example` to `.env` and set:
 | `JWT_SECRET` | Secret for API JWT |
 | `TRANSFER_TOKEN_SALT` | Salt for transfer tokens |
 | `ENCRYPTION_KEY` | Encryption key |
+| `DATABASE_CLIENT` | `mysql`, `postgres` or `sqlite` |
+| `DATABASE_HOST` / `DATABASE_PORT` | Database server (MySQL: `localhost` / `3306`) |
+| `DATABASE_NAME` | Database name |
+| `DATABASE_USERNAME` / `DATABASE_PASSWORD` | Database credentials |
+| `DATABASE_SSL` | `true` or `false` |
 
 ### Database
 
-Strapi defaults to SQLite (`database/.tmp/data.db`). To use MySQL or PostgreSQL, set `DATABASE_CLIENT` and the corresponding `DATABASE_*` variables (see `config/database.ts`).
+This project is configured for MySQL: set `DATABASE_CLIENT=mysql` and the `DATABASE_*` variables above, and create the database before the first run. If `DATABASE_CLIENT` is not set, Strapi's config falls back to SQLite (`database/.tmp/data.db`); using it requires the SQLite driver to be installed. To use PostgreSQL, set `DATABASE_CLIENT=postgres` and the matching variables (see `config/database.ts`).
 
 The following are intentionally **not committed**: `node_modules/`, `dist/`, `.strapi/`, `database/`, `types/`, `.env`, and `.strapi-updater.json` (see `backend/.gitignore`).
+
+### Production notes
+
+- Set `NEXT_PUBLIC_STRAPI_URL` in the frontend hosting environment to the deployed Strapi URL.
+- Restrict `strapi::cors` in `backend/config/middlewares.ts` to your frontend domain.
+- Use strong, unique values for all secrets in the backend `.env`.
 
 ## Hero Chat Bot
 
@@ -175,11 +286,21 @@ The hero section includes an AI-powered chat bot (`frontend/components/three/Her
 - **Context-aware**: Covers services, solutions, process, technology, portfolio, pricing, timelines, and contact info.
 - **Suggestion chips**: Follow-up prompts and quick links appear after each answer.
 
-### Recent fixes
+### Recent changes
 
+- **CMS-managed navbar and footer**: Both are now loaded from Strapi (single types `Navbar` and `Footer`) with built-in fallbacks, replacing the hardcoded content.
 - **Response glitches**: Removed a duplicate idle-greeting loop that was fighting the active response loop, fixing flashing, early disappearance, and mixed default/chat responses.
 - **Mobile responsiveness**: Compact orb height on mobile (`h-[300px]`), minimum orb height floor, proper chat panel padding, and a max-height chat card with scroll on small screens.
 - **Background particles**: Subtle cyan snow-like particles floating across the full hero background (`HeroParticles.tsx`), respecting `prefers-reduced-motion`.
+
+## Troubleshooting
+
+| Symptom | Fix |
+|---------|-----|
+| Navbar or footer shows old or default content | Open `http://localhost:1337/api/navbar` and `/api/footer` and check the status. `403` means permission, `404` means missing entry. Also confirm `frontend/.env.local` exists and restart the frontend. |
+| A link named "Link" appears in the navbar | A link was added in Strapi without editing it. Change its label and URL, or delete it. |
+| Strapi fails with `Unexpected end of JSON input` | A `schema.json` file is empty. Restore it from git and restart (see `backend/README.md`). |
+| `"use client" directive must be placed before other expressions` | Leftover code sits above `"use client"` in the file. The directive must be the first line. |
 
 ## Contact
 

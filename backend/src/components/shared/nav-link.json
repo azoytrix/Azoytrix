@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_shared_nav_links",
+  "info": {
+    "displayName": "NavLink",
+    "description": "A single navigation link"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true,
+      "default": "Link",
+      "minLength": 1,
+      "maxLength": 60
+    },
+    "href": {
+      "type": "string",
+      "required": true,
+      "default": "/",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "external": {
+      "type": "boolean",
+      "default": false
+    },
+    "newTab": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

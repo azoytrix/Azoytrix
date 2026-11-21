@@ -1,0 +1,132 @@
+{
+  "kind": "singleType",
+  "collectionName": "footers",
+  "info": {
+    "singularName": "footer",
+    "pluralName": "footers",
+    "displayName": "Footer",
+    "description": "Global footer content for the Azoytrix frontend."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "siteName": {
+      "type": "string",
+      "default": "AZOYTRIX",
+      "maxLength": 60
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "logoAlt": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "tagline": {
+      "type": "string",
+      "default": "Engineering the Next Era.",
+      "maxLength": 160
+    },
+    "pillars": {
+      "type": "string",
+      "default": "INNOVATION · INTELLIGENCE · ENGINEERING",
+      "maxLength": 160
+    },
+    "brandBadge": {
+      "type": "string",
+      "default": "Built for what's next",
+      "maxLength": 80
+    },
+
+    "ctaEyebrow": {
+      "type": "string",
+      "default": "The next chapter starts here",
+      "maxLength": 100
+    },
+    "ctaHeadingLine1": {
+      "type": "string",
+      "default": "Let's create",
+      "maxLength": 60
+    },
+    "ctaHeadingLine2": {
+      "type": "string",
+      "default": "what's next.",
+      "maxLength": 60
+    },
+    "ctaDescription": {
+      "type": "text",
+      "default": "Great ideas deserve thoughtful engineering. Tell us what you're imagining, and let's make it happen.",
+      "maxLength": 300
+    },
+    "ctaLabel": {
+      "type": "string",
+      "default": "Start a conversation",
+      "maxLength": 60
+    },
+    "ctaHref": {
+      "type": "string",
+      "default": "/contact",
+      "maxLength": 200
+    },
+    "sideCode": {
+      "type": "string",
+      "default": "AZ / 001",
+      "maxLength": 30
+    },
+
+    "exploreTitle": {
+      "type": "string",
+      "default": "Explore",
+      "maxLength": 40
+    },
+    "exploreLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.nav-link"
+    },
+
+    "contactTitle": {
+      "type": "string",
+      "default": "Get in touch",
+      "maxLength": 60
+    },
+    "contactDescription": {
+      "type": "text",
+      "default": "Have an idea worth building? Let's turn your vision into something meaningful.",
+      "maxLength": 300
+    },
+    "email": {
+      "type": "email",
+      "default": "azoytrix@gmail.com"
+    },
+    "contactLinkLabel": {
+      "type": "string",
+      "default": "Contact Azoytrix",
+      "maxLength": 60
+    },
+    "contactLinkHref": {
+      "type": "string",
+      "default": "/contact",
+      "maxLength": 200
+    },
+
+    "copyrightText": {
+      "type": "string",
+      "default": "Azoytrix. All rights reserved.",
+      "maxLength": 120
+    },
+    "bottomTags": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.footer-tag"
+    },
+    "backToTopLabel": {
+      "type": "string",
+      "default": "Back to top",
+      "maxLength": 40
+    }
+  }
+}
