@@ -1,10 +1,15 @@
 
 import SectionHeading from "@/components/ui/SectionHeading";
+import GradientTitle from "@/components/ui/GradientTitle";
 import Reveal from "@/components/ui/Reveal";
-import { TECH } from "@/lib/data";
+import { FALLBACK_HOMEPAGE, type TechContent } from "@/lib/homepage";
 import { ArrowUpRight, Cpu } from "lucide-react";
 
-export default function TechStack() {
+export default function TechStack({
+  content = FALLBACK_HOMEPAGE.tech,
+}: {
+  content?: TechContent;
+}) {
   return (
     <section className="relative isolate overflow-hidden bg-white py-24 sm:py-32">
       {/* Background */}
@@ -17,20 +22,15 @@ export default function TechStack() {
 
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <SectionHeading
-          eyebrow="Our Technology"
-          title={
-            <>
-              The technology behind{" "}
-              <span className="text-gradient">what's next.</span>
-            </>
-          }
-          description="We bring together modern frameworks, reliable infrastructure and intelligent tools to engineer digital products built for performance, flexibility and scale."
+          eyebrow={content.eyebrow}
+          title={<GradientTitle text={content.title} highlight={content.titleHighlight} />}
+          description={content.description}
         />
 
         {/* Technology cards */}
         <div className="mt-16 grid gap-5 md:grid-cols-2">
-          {TECH.map((t, i) => (
-            <Reveal key={t.group} delay={i * 0.08}>
+          {content.groups.map((t, i) => (
+            <Reveal key={`${t.group}-${i}`} delay={i * 0.08}>
               <article className="group relative h-full overflow-hidden rounded-2xl border border-line/80 bg-white/90 p-7 shadow-[0_8px_35px_rgba(15,35,70,0.035)] backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 hover:border-brand/30 hover:shadow-[0_22px_50px_rgba(30,111,217,0.09)] sm:p-8">
 
                 {/* Card heading */}
@@ -42,7 +42,7 @@ export default function TechStack() {
 
                     <div>
                       <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
-                        Technology domain 0{i + 1}
+                        {content.domainLabel} 0{i + 1}
                       </span>
 
                       <h3 className="mt-1 font-display text-lg font-bold text-navy">
@@ -109,7 +109,7 @@ export default function TechStack() {
                 {/* Footer */}
                 <div className="mt-7 flex items-center justify-between">
                   <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                    Azoytrix technology ecosystem
+                    {content.ecosystemLabel}
                   </span>
 
                   <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.5)]" />
@@ -124,11 +124,11 @@ export default function TechStack() {
           <div className="mt-12 flex flex-col items-center justify-between gap-5 rounded-2xl border border-brand/10 bg-surface/70 p-7 text-center sm:flex-row sm:text-left sm:p-9">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand">
-                Technology with purpose
+                {content.closingEyebrow}
               </p>
 
               <h3 className="mt-2 font-display text-xl font-bold text-navy sm:text-2xl">
-                The right tools. The right architecture. Real-world impact.
+                {content.closingTitle}
               </h3>
             </div>
 

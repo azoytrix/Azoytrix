@@ -5,7 +5,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { ArrowUpRight, Mail, MoveUpRight } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";
-import { SITE } from "@/lib/site";
+import { FALLBACK_HOMEPAGE, type CtaContent } from "@/lib/homepage";
 
 const BuildingModel = dynamic(
   () => import("@/components/ui/BuildingModel"),
@@ -17,7 +17,11 @@ const BuildingModel = dynamic(
   }
 );
 
-export default function CtaStrip() {
+export default function CtaStrip({
+  content = FALLBACK_HOMEPAGE.cta,
+}: {
+  content?: CtaContent;
+}) {
   return (
     <section className="relative isolate overflow-hidden bg-[#f4f7fb] px-5 py-24 sm:px-8 sm:py-32">
       {/* Ambient page background */}
@@ -51,29 +55,28 @@ export default function CtaStrip() {
                 </span>
 
                 <span className="text-[10px] font-bold uppercase tracking-[0.23em] text-cyan-200">
-                  The next chapter starts here
+                  {content.badge}
                 </span>
               </div>
 
               <h2 className="font-display text-4xl font-extrabold leading-[1.12] tracking-tight text-white sm:text-5xl xl:text-6xl">
-                Have an idea?
+                {content.title}
                 <span className="mt-2 block bg-linear-to-r from-cyan-200 via-blue-300 to-white bg-clip-text text-transparent">
-                  Let's make it extraordinary.
+                  {content.titleHighlight}
                 </span>
               </h2>
 
               <p className="mt-7 max-w-xl text-base leading-8 text-blue-100/65 sm:text-lg">
-                From ambitious ideas to intelligent digital products, let's
-                create technology that moves your business forward.
+                {content.description}
               </p>
 
               {/* Actions */}
               <div className="mt-10 flex flex-col gap-4 sm:flex-row">
                 <Link
-                  href="/contact"
+                  href={content.primaryHref}
                   className="group inline-flex items-center justify-center gap-3 rounded-full bg-white px-8 py-4 text-sm font-bold text-[#07172f] shadow-[0_8px_35px_rgba(255,255,255,0.12)] transition-all duration-300 hover:-translate-y-1 hover:bg-cyan-200 hover:shadow-[0_12px_35px_rgba(34,211,238,0.2)]"
                 >
-                  Start a conversation
+                  {content.primaryLabel}
                   <MoveUpRight
                     size={17}
                     className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
@@ -81,11 +84,11 @@ export default function CtaStrip() {
                 </Link>
 
                 <a
-                  href={`mailto:${SITE.email}`}
+                  href={`mailto:${content.email}`}
                   className="inline-flex items-center justify-center gap-3 rounded-full border border-white/20 bg-white/[0.04] px-7 py-4 text-sm font-semibold text-white transition-all duration-300 hover:border-cyan-300/40 hover:bg-white/10"
                 >
                   <Mail size={17} className="text-cyan-300" />
-                  Email our team
+                  {content.emailLabel}
                 </a>
               </div>
             </div>
@@ -102,7 +105,7 @@ export default function CtaStrip() {
             <div className="pointer-events-none absolute bottom-5 right-2 hidden items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 backdrop-blur-md sm:flex">
                 <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_10px_#67e8f9]" />
                 <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-blue-100/60">
-                Architectural intelligence
+                {content.modelCaption}
                 </span>
             </div>
             </div>
@@ -112,11 +115,11 @@ export default function CtaStrip() {
           {/* Bottom signature */}
           <div className="relative z-20 mt-10 flex flex-col justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center lg:mt-4">
             <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-blue-100/40">
-              AZOYTRIX / IDEAS INTO IMPACT
+              {content.signatureLeft}
             </span>
 
             <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-blue-100/50">
-              Built for what's next
+              {content.signatureRight}
               <ArrowUpRight size={13} className="text-cyan-300" />
             </span>
           </div>

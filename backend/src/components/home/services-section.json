@@ -1,0 +1,55 @@
+{
+  "collectionName": "components_home_services_sections",
+  "info": {
+    "displayName": "ServicesSection",
+    "description": "Services overview: heading, six cards and bottom call-to-action."
+  },
+  "options": {},
+  "attributes": {
+    "eyebrow": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "titleHighlight": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "home.icon-card"
+    },
+    "cardFooterLabel": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "ctaEyebrow": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "ctaTitle": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "ctaDescription": {
+      "type": "text",
+      "maxLength": 250
+    },
+    "ctaLabel": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "ctaHref": {
+      "type": "string",
+      "maxLength": 200
+    }
+  }
+}

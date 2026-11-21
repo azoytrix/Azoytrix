@@ -3,10 +3,14 @@
 
 import Counter from "@/components/ui/Counter";
 import Reveal from "@/components/ui/Reveal";
-import { STATS } from "@/lib/data";
+import { FALLBACK_HOMEPAGE, type StatsContent } from "@/lib/homepage";
 import { Activity, ArrowUpRight, Orbit } from "lucide-react";
 
-export default function Stats() {
+export default function Stats({
+  content = FALLBACK_HOMEPAGE.stats,
+}: {
+  content?: StatsContent;
+}) {
   return (
     <section className="relative isolate overflow-hidden bg-[#07172f] py-28 sm:py-36">
       {/* Background */}
@@ -25,21 +29,20 @@ export default function Stats() {
               <div className="mb-5 flex items-center gap-3">
                 <span className="h-px w-9 bg-cyan-400" />
                 <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-cyan-300">
-                  The Azoytrix footprint
+                  {content.eyebrow}
                 </span>
               </div>
 
               <h2 className="max-w-2xl font-display text-3xl font-bold leading-tight tracking-tight text-white sm:text-5xl">
-                Numbers tell a story.
+                {content.title}
                 <span className="block text-cyan-300">
-                  We build what comes next.
+                  {content.titleHighlight}
                 </span>
               </h2>
             </div>
 
             <div className="max-w-xs text-sm leading-7 text-blue-100/60">
-              A snapshot of the ambition, engineering and impact behind every
-              digital experience we create.
+              {content.description}
             </div>
           </div>
         </Reveal>
@@ -64,8 +67,8 @@ export default function Stats() {
 
           {/* Stats grid */}
           <div className="relative grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {STATS.map((s, i) => (
-              <Reveal key={s.label} delay={i * 0.12}>
+            {content.items.map((s, i) => (
+              <Reveal key={`${s.label}-${i}`} delay={i * 0.12}>
                 <article
                   className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] p-7 backdrop-blur-md transition-all duration-500 hover:-translate-y-2 hover:border-cyan-300/30 hover:bg-white/[0.07] sm:p-8 ${
                     i % 2 === 0 ? "lg:translate-y-12" : "lg:-translate-y-12"
@@ -115,12 +118,12 @@ export default function Stats() {
             <div className="flex items-center gap-3">
               <Activity size={16} className="text-cyan-300" />
               <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-blue-100/50">
-                Engineering with purpose
+                {content.footerLabel}
               </span>
             </div>
 
             <span className="font-mono text-[10px] tracking-wider text-blue-100/30">
-              AZOYTRIX / BUILDING THE FUTURE
+              {content.footerCode}
             </span>
           </div>
         </Reveal>

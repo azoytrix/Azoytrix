@@ -1,0 +1,47 @@
+{
+  "collectionName": "components_home_tech_sections",
+  "info": {
+    "displayName": "TechSection",
+    "description": "Technology stack: heading, domains and closing statement."
+  },
+  "options": {},
+  "attributes": {
+    "eyebrow": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "titleHighlight": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "groups": {
+      "type": "component",
+      "repeatable": true,
+      "component": "home.tech-group"
+    },
+    "domainLabel": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "ecosystemLabel": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "closingEyebrow": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "closingTitle": {
+      "type": "string",
+      "maxLength": 160
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_home_stats_items",
+  "info": {
+    "displayName": "Stat",
+    "description": "A number shown in the stats section."
+  },
+  "options": {},
+  "attributes": {
+    "value": {
+      "type": "integer",
+      "default": 0
+    },
+    "suffix": {
+      "type": "string",
+      "maxLength": 5
+    },
+    "label": {
+      "type": "string",
+      "maxLength": 80
+    }
+  }
+}

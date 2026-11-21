@@ -1,0 +1,70 @@
+{
+  "kind": "singleType",
+  "collectionName": "homepages",
+  "info": {
+    "singularName": "homepage",
+    "pluralName": "homepages",
+    "displayName": "Homepage",
+    "description": "All homepage sections of the Azoytrix website, in page order."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "hero": {
+      "type": "component",
+      "repeatable": false,
+      "component": "home.hero"
+    },
+    "brandStatement": {
+      "type": "component",
+      "repeatable": false,
+      "component": "home.brand-statement"
+    },
+    "services": {
+      "type": "component",
+      "repeatable": false,
+      "component": "home.services-section"
+    },
+    "solutions": {
+      "type": "component",
+      "repeatable": false,
+      "component": "home.solutions-section"
+    },
+    "why": {
+      "type": "component",
+      "repeatable": false,
+      "component": "home.why-section"
+    },
+    "tech": {
+      "type": "component",
+      "repeatable": false,
+      "component": "home.tech-section"
+    },
+    "process": {
+      "type": "component",
+      "repeatable": false,
+      "component": "home.process-section"
+    },
+    "portfolio": {
+      "type": "component",
+      "repeatable": false,
+      "component": "home.portfolio-section"
+    },
+    "stats": {
+      "type": "component",
+      "repeatable": false,
+      "component": "home.stats-section"
+    },
+    "principles": {
+      "type": "component",
+      "repeatable": false,
+      "component": "home.principles-section"
+    },
+    "cta": {
+      "type": "component",
+      "repeatable": false,
+      "component": "home.cta-section"
+    }
+  }
+}

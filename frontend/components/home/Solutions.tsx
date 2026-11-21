@@ -2,10 +2,16 @@
 import Link from "next/link";
 import { ArrowRight, MoveUpRight } from "lucide-react";
 import SectionHeading from "@/components/ui/SectionHeading";
+import GradientTitle from "@/components/ui/GradientTitle";
 import Reveal from "@/components/ui/Reveal";
-import { SOLUTIONS } from "@/lib/data";
+import DynamicIcon from "@/components/ui/DynamicIcon";
+import { FALLBACK_HOMEPAGE, type SolutionsContent } from "@/lib/homepage";
 
-export default function Solutions() {
+export default function Solutions({
+  content = FALLBACK_HOMEPAGE.solutions,
+}: {
+  content?: SolutionsContent;
+}) {
   return (
     <section className="relative isolate overflow-hidden bg-white py-24 sm:py-32">
 
@@ -23,23 +29,18 @@ export default function Solutions() {
 
           <SectionHeading
             center={false}
-            eyebrow="Solutions"
-            title={
-              <>
-                Technology that moves your{" "}
-                <span className="text-gradient">business forward.</span>
-              </>
-            }
-            description="We combine business insight with technical depth to solve real operational challenges, simplify complexity and create opportunities for sustainable growth."
+            eyebrow={content.eyebrow}
+            title={<GradientTitle text={content.title} highlight={content.titleHighlight} />}
+            description={content.description}
           />
 
           <Reveal delay={0.1}>
             <div className="mt-9">
               <Link
-                href="/solutions"
+                href={content.buttonHref}
                 className="group inline-flex items-center gap-3 rounded-full bg-navy px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-navy/10 transition-all duration-300 hover:-translate-y-1 hover:bg-brand hover:shadow-brand/20"
               >
-                Discover our solutions
+                {content.buttonLabel}
                 <ArrowRight
                   size={16}
                   className="transition-transform duration-300 group-hover:translate-x-1"
@@ -52,10 +53,10 @@ export default function Solutions() {
           <Reveal delay={0.2}>
             <div className="mt-14 border-l-2 border-brand/30 pl-5">
               <p className="text-sm font-semibold text-navy">
-                Built around your business.
+                {content.noteTitle}
               </p>
               <p className="mt-2 max-w-xs text-sm leading-7 text-muted">
-                Purposeful technology, practical thinking and solutions designed to scale with you.
+                {content.noteText}
               </p>
             </div>
           </Reveal>
@@ -64,8 +65,8 @@ export default function Solutions() {
         {/* Right solution cards */}
         <div className="grid gap-5 sm:grid-cols-2 lg:col-span-3">
 
-          {SOLUTIONS.map((s, i) => (
-            <Reveal key={s.title} delay={i * 0.08}>
+          {content.items.map((s, i) => (
+            <Reveal key={`${s.title}-${i}`} delay={i * 0.08}>
               <article className="group relative flex h-full min-h-64 flex-col overflow-hidden rounded-2xl border border-line/80 bg-white/80 p-7 shadow-[0_8px_30px_rgba(15,35,70,0.035)] backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-brand/30 hover:shadow-[0_24px_55px_rgba(30,111,217,0.10)]">
 
                 {/* Hover glow */}
@@ -85,7 +86,7 @@ export default function Solutions() {
 
                 {/* Icon */}
                 <div className="relative mt-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-brand/10 to-cyan/10 text-brand ring-1 ring-brand/10 transition-all duration-500 group-hover:scale-110 group-hover:from-brand group-hover:to-cyan group-hover:text-white group-hover:shadow-lg group-hover:shadow-brand/20">
-                  <s.icon size={25} strokeWidth={1.8} />
+                  <DynamicIcon name={s.icon} size={25} strokeWidth={1.8} />
                 </div>
 
                 {/* Content */}

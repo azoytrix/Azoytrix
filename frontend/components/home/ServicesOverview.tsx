@@ -2,10 +2,16 @@
 import Link from "next/link";
 import { ArrowRight, MoveUpRight } from "lucide-react";
 import SectionHeading from "@/components/ui/SectionHeading";
+import GradientTitle from "@/components/ui/GradientTitle";
 import Reveal from "@/components/ui/Reveal";
-import { SERVICES } from "@/lib/data";
+import DynamicIcon from "@/components/ui/DynamicIcon";
+import { FALLBACK_HOMEPAGE, type ServicesContent } from "@/lib/homepage";
 
-export default function ServicesOverview() {
+export default function ServicesOverview({
+  content = FALLBACK_HOMEPAGE.services,
+}: {
+  content?: ServicesContent;
+}) {
   return (
     <section className="relative isolate overflow-hidden bg-surface py-24 sm:py-32">
 
@@ -19,15 +25,15 @@ export default function ServicesOverview() {
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
 
         <SectionHeading
-          eyebrow="What we do"
-          title="Engineering the next generation of digital experiences."
-          description="Six specialized capabilities. One technology partner. From ambitious first ideas to intelligent, scalable platforms, we engineer solutions built for what comes next."
+          eyebrow={content.eyebrow}
+          title={<GradientTitle text={content.title} highlight={content.titleHighlight} />}
+          description={content.description}
         />
 
         {/* Services grid */}
         <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map((s, i) => (
-            <Reveal key={s.title} delay={i * 0.07}>
+          {content.items.map((s, i) => (
+            <Reveal key={`${s.title}-${i}`} delay={i * 0.07}>
               <article className="group relative flex h-full min-h-72 flex-col overflow-hidden rounded-2xl border border-white/80 bg-white/85 p-7 shadow-[0_8px_35px_rgba(15,35,70,0.035)] backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-brand/25 hover:shadow-[0_24px_60px_rgba(30,111,217,0.11)] sm:p-8">
 
                 {/* Hover background glow */}
@@ -47,7 +53,7 @@ export default function ServicesOverview() {
 
                 {/* Icon */}
                 <div className="relative mt-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-brand/10 to-cyan/10 text-brand ring-1 ring-brand/10 transition-all duration-500 group-hover:scale-110 group-hover:from-brand group-hover:to-cyan group-hover:text-white group-hover:shadow-lg group-hover:shadow-brand/20">
-                  <s.icon size={25} strokeWidth={1.8} />
+                  <DynamicIcon name={s.icon} size={25} strokeWidth={1.8} />
                 </div>
 
                 {/* Content */}
@@ -65,7 +71,7 @@ export default function ServicesOverview() {
                 <div className="relative mt-auto pt-8">
                   <div className="h-px w-full bg-slate-100 transition-colors duration-300 group-hover:bg-brand/20" />
                   <div className="mt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-slate-400 transition-all duration-300 group-hover:gap-3 group-hover:text-brand">
-                    Our expertise
+                    {content.cardFooterLabel}
                     <ArrowRight size={14} />
                   </div>
                 </div>
@@ -83,21 +89,21 @@ export default function ServicesOverview() {
 
             <div className="relative">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand">
-                Have something in mind?
+                {content.ctaEyebrow}
               </p>
               <h3 className="mt-2 font-display text-xl font-bold text-navy sm:text-2xl">
-                Let's engineer your next big idea.
+                {content.ctaTitle}
               </h3>
               <p className="mt-2 text-sm text-muted">
-                Explore our capabilities and discover what's possible.
+                {content.ctaDescription}
               </p>
             </div>
 
             <Link
-              href="/services"
+              href={content.ctaHref}
               className="relative mt-6 inline-flex shrink-0 items-center justify-center gap-3 rounded-full bg-navy px-6 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-brand hover:shadow-lg hover:shadow-brand/20 sm:mt-0"
             >
-              Explore all services
+              {content.ctaLabel}
               <ArrowRight size={16} />
             </Link>
 

@@ -5,14 +5,15 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import HeroVisual from "@/components/three/HeroVisual";
 import HeroParticles from "@/components/home/HeroParticles";
-import { SITE } from "@/lib/site";
+import { FALLBACK_HOMEPAGE, type HeroContent } from "@/lib/homepage";
 
-export default function Hero() {
+export default function Hero({
+  content = FALLBACK_HOMEPAGE.hero,
+}: {
+  content?: HeroContent;
+}) {
   return (
-    <section
-        id="hero"
-        className="relative scroll-mt-20 overflow-hidden bg-linear-to-b from-white via-white to-surface"
-      >
+    <section className="relative overflow-hidden bg-linear-to-b from-white via-white to-surface">
       <div className="bg-grid pointer-events-none absolute inset-0" />
       {/* <HeroParticles /> */}
 
@@ -25,36 +26,35 @@ export default function Hero() {
           >
           <span className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-4 py-1.5 text-xs font-semibold tracking-widest text-brand">
             <span className="h-1.5 w-1.5 rounded-full bg-cyan" />
-            SOFTWARE · AI · CLOUD
+            {content.badge}
           </span>
 
           <h1 className="mt-6 text-5xl font-extrabold leading-[1.05] text-navy sm:text-6xl lg:text-7xl">
-            Engineering <br />
-            the <span className="text-gradient">Next Era.</span>
+            {content.headingLine1} <br />
+            {content.headingLine2} <span className="text-gradient">{content.headingHighlight}</span>
           </h1>
 
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
-            We design and build intelligent software, scalable cloud platforms and digital
-            products that move businesses forward.
+            {content.description}
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">
             <Link
-              href="/contact"
+              href={content.primaryCtaHref}
               className="group inline-flex items-center gap-2 rounded-full bg-navy px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-navy/20 transition hover:bg-brand"
             >
-              Start a project
+              {content.primaryCtaLabel}
               <ArrowRight size={16} className="transition group-hover:translate-x-1" />
             </Link>
             <Link
-              href="/our-work"
+              href={content.secondaryCtaHref}
               className="rounded-full border border-line bg-white px-7 py-3.5 text-sm font-semibold text-navy transition hover:border-brand hover:text-brand"
             >
-              See our work
+              {content.secondaryCtaLabel}
             </Link>
           </div>
 
-          <p className="mt-10 text-xs tracking-[0.25em] text-muted">{SITE.pillars}</p>
+          <p className="mt-10 text-xs tracking-[0.25em] text-muted">{content.pillars}</p>
         </motion.div>
 
           <motion.div

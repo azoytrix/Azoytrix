@@ -1,13 +1,14 @@
 
 import Reveal from "@/components/ui/Reveal";
+import { FALLBACK_HOMEPAGE, type BrandStatementContent } from "@/lib/homepage";
 
-const capabilities = [
-  "Intelligent software",
-  "AI-driven innovation",
-  "Cloud-native solutions",
-];
+export default function BrandStatement({
+  content = FALLBACK_HOMEPAGE.brandStatement,
+}: {
+  content?: BrandStatementContent;
+}) {
+  const capabilities = content.capabilities;
 
-export default function BrandStatement() {
   return (
     <section className="relative isolate overflow-hidden bg-white py-28 sm:py-36">
       {/* Background details */}
@@ -26,35 +27,35 @@ export default function BrandStatement() {
           <div className="mb-8 flex items-center justify-center gap-3">
             <span className="h-px w-8 bg-brand/50" />
             <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-brand">
-              Who we are
+              {content.eyebrow}
             </span>
             <span className="h-px w-8 bg-brand/50" />
           </div>
 
           {/* Main statement */}
           <h2 className="font-display text-3xl font-semibold leading-[1.25] tracking-tight text-navy sm:text-5xl lg:text-[3.65rem]">
-            We turn ambitious ideas into{" "}
+            {content.headingStart}{" "}
             <span className="relative inline-block">
               <span className="text-gradient">
-                intelligent digital experiences.
+                {content.headingHighlight}
               </span>
             </span>
           </h2>
 
           {/* Description */}
           <p className="mx-auto mt-8 max-w-3xl text-base leading-8 text-slate-500 sm:text-lg sm:leading-9">
-            Azoytrix is a technology company bringing together{" "}
+            {content.descriptionStart}{" "}
             <span className="font-semibold text-navy">
-              software engineering, artificial intelligence and cloud
+              {content.descriptionHighlight}
             </span>{" "}
-            to help organisations innovate, evolve and build what comes next.
+            {content.descriptionEnd}
           </p>
 
           {/* Capabilities */}
           <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
             {capabilities.map((item, index) => (
               <div
-                key={item}
+                key={`${item}-${index}`}
                 className="group flex items-center gap-2.5 rounded-full border border-slate-200/80 bg-white/80 px-5 py-3 shadow-[0_4px_20px_rgba(15,35,70,0.035)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand/30 hover:shadow-[0_10px_30px_rgba(30,111,217,0.09)]"
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-brand transition-transform duration-300 group-hover:scale-150" />

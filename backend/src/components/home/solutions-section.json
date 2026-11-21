@@ -1,0 +1,47 @@
+{
+  "collectionName": "components_home_solutions_sections",
+  "info": {
+    "displayName": "SolutionsSection",
+    "description": "Solutions: heading, button, side note and cards."
+  },
+  "options": {},
+  "attributes": {
+    "eyebrow": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "titleHighlight": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "buttonLabel": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "buttonHref": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "noteTitle": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "noteText": {
+      "type": "text",
+      "maxLength": 250
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "home.icon-card"
+    }
+  }
+}

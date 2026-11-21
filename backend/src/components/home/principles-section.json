@@ -1,0 +1,47 @@
+{
+  "collectionName": "components_home_principles_sections",
+  "info": {
+    "displayName": "PrinciplesSection",
+    "description": "Principles: heading, pillars and philosophy banner."
+  },
+  "options": {},
+  "attributes": {
+    "eyebrow": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "titleHighlight": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "home.text-card"
+    },
+    "philosophyLabel": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "philosophyLine1": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "philosophyLine2": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "mindsetLabel": {
+      "type": "string",
+      "maxLength": 60
+    }
+  }
+}

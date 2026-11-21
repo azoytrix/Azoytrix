@@ -1,10 +1,16 @@
 
 import SectionHeading from "@/components/ui/SectionHeading";
+import GradientTitle from "@/components/ui/GradientTitle";
 import Reveal from "@/components/ui/Reveal";
-import { PROCESS } from "@/lib/data";
+import DynamicIcon from "@/components/ui/DynamicIcon";
+import { FALLBACK_HOMEPAGE, type ProcessContent } from "@/lib/homepage";
 import { ArrowDown, ArrowRight } from "lucide-react";
 
-export default function Process() {
+export default function Process({
+  content = FALLBACK_HOMEPAGE.process,
+}: {
+  content?: ProcessContent;
+}) {
   return (
     <section className="relative isolate overflow-hidden bg-surface py-24 sm:py-32">
 
@@ -20,14 +26,9 @@ export default function Process() {
 
         {/* Section heading */}
         <SectionHeading
-          eyebrow="How we work"
-          title={
-            <>
-              A clear path from{" "}
-              <span className="text-gradient">idea to impact.</span>
-            </>
-          }
-          description="A thoughtful, collaborative process that transforms complex challenges into meaningful digital solutions."
+          eyebrow={content.eyebrow}
+          title={<GradientTitle text={content.title} highlight={content.titleHighlight} />}
+          description={content.description}
         />
 
         {/* Process timeline */}
@@ -38,15 +39,15 @@ export default function Process() {
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5 lg:gap-5">
 
-            {PROCESS.map((p, i) => (
-              <Reveal key={p.title} delay={i * 0.1}>
+            {content.steps.map((p, i) => (
+              <Reveal key={`${p.title}-${i}`} delay={i * 0.1}>
                 <article className="group relative flex h-full flex-col rounded-2xl border border-white/80 bg-white/85 p-6 shadow-[0_8px_35px_rgba(15,35,70,0.035)] backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-brand/30 hover:shadow-[0_24px_55px_rgba(30,111,217,0.10)] sm:p-7">
 
                   {/* Step number */}
                   <div className="relative z-10 flex items-center justify-between">
 
                     <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-brand/10 bg-linear-to-br from-brand/10 to-cyan/10 text-brand shadow-sm transition-all duration-500 group-hover:scale-105 group-hover:from-brand group-hover:to-cyan group-hover:text-white group-hover:shadow-lg group-hover:shadow-brand/20">
-                      <p.icon size={26} strokeWidth={1.8} />
+                      <DynamicIcon name={p.icon} size={26} strokeWidth={1.8} />
                     </div>
 
                     <span className="font-display text-3xl font-bold text-slate-100 transition-colors duration-300 group-hover:text-brand/20">
@@ -58,7 +59,7 @@ export default function Process() {
                   {/* Content */}
                   <div className="mt-8">
                     <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand">
-                      Phase 0{i + 1}
+                      {content.phaseLabel} 0{i + 1}
                     </span>
 
                     <h3 className="mt-2 font-display text-lg font-bold tracking-tight text-navy transition-colors duration-300 group-hover:text-brand">
@@ -74,7 +75,7 @@ export default function Process() {
                   <div className="mt-auto flex items-center justify-between pt-8">
                     <div className="h-px w-10 bg-brand/30 transition-all duration-500 group-hover:w-full group-hover:bg-brand/50" />
 
-                    {i !== PROCESS.length - 1 && (
+                    {i !== content.steps.length - 1 && (
                       <ArrowRight
                         size={15}
                         className="text-slate-300 transition-all duration-300 group-hover:translate-x-1 group-hover:text-brand"
@@ -95,11 +96,11 @@ export default function Process() {
 
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand">
-                From vision to reality
+                {content.closingEyebrow}
               </p>
 
               <h3 className="mt-2 font-display text-xl font-bold text-navy sm:text-2xl">
-                Every great product starts with a clear process.
+                {content.closingTitle}
               </h3>
             </div>
 

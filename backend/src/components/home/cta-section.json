@@ -1,0 +1,53 @@
+{
+  "collectionName": "components_home_cta_sections",
+  "info": {
+    "displayName": "CtaSection",
+    "description": "Closing call-to-action banner with the 3D building."
+  },
+  "options": {},
+  "attributes": {
+    "badge": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "titleHighlight": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 300
+    },
+    "primaryLabel": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "primaryHref": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "emailLabel": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "email": {
+      "type": "email"
+    },
+    "modelCaption": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "signatureLeft": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "signatureRight": {
+      "type": "string",
+      "maxLength": 60
+    }
+  }
+}
