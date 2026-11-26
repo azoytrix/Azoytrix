@@ -5,6 +5,7 @@ import Hero from "@/components/home/Hero";
 import BrandStatement from "@/components/home/BrandStatement";
 import ServicesOverview from "@/components/home/ServicesOverview";
 import Solutions from "@/components/home/Solutions";
+import MatrixRain from "@/components/home/MatrixRain";
 import WhyAzoytrix from "@/components/home/WhyAzoytrix";
 import TechStack from "@/components/home/TechStack";
 import Process from "@/components/home/Process";
@@ -26,6 +27,7 @@ export default function HomeSections() {
       <BrandStatement content={config.brandStatement} />
       <ServicesOverview content={config.services} />
       <Solutions content={config.solutions} />
+      <MatrixRain />
       <WhyAzoytrix content={config.why} />
       <TechStack content={config.tech} />
       <Process content={config.process} />
