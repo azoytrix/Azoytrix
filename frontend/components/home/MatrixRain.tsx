@@ -344,7 +344,7 @@ container.appendChild(canvas);
       );
     }
 
-    container.addEventListener(
+    window.addEventListener(
       "pointermove",
       handlePointerMove,
       { passive: true }
@@ -413,8 +413,8 @@ container.appendChild(canvas);
         handleVisibilityChange
       );
 
-      container.removeEventListener(
-       "pointermove",
+      window.removeEventListener(
+        "pointermove",
         handlePointerMove
       );
 
