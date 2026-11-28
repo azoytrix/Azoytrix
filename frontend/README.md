@@ -140,6 +140,13 @@ Edit `FALLBACK_NAVBAR` in `lib/navbar.ts`, `FALLBACK_FOOTER` in `lib/footer.ts` 
 | `"use client" directive must be placed before other expressions` | The file has leftover code above `"use client"`. The directive must be the very first line, so remove everything above it. |
 | Logo looks squashed | Add `className="object-contain"` to the logo `<Image>`. The footer already has it. |
 
+## Recent Changes (frontend)
+
+- **Dependencies**: Updated `lucide-react` from `^1.73.0` to `^1.83.0`.
+- **HomeSections.tsx**: Added `ShowcaseGallery` component import and rendering.
+- **MatrixRain.tsx**: Optimized GLYPH_LIST to use unique characters only via `new Set()`.
+- **globals.css**: Added trailing newline at end of file.
+- **New untracked files/directories**: `frontend/app/demos/`, `frontend/components/showcase/`, `frontend/lib/showcase.ts`, `frontend/public/models/geometry_texture_effect_spheres.glb`.
 ## Project Structure (CMS-related files)
 
 ```

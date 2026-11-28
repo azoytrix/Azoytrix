@@ -324,6 +324,25 @@ The hero section includes an AI-powered chat bot (`frontend/components/three/Her
 - **Response glitches**: Removed a duplicate idle-greeting loop that was fighting the active response loop, fixing flashing, early disappearance, and mixed default/chat responses.
 - **Mobile responsiveness**: Compact orb height on mobile (`h-[300px]`), minimum orb height floor, proper chat panel padding, and a max-height chat card with scroll on small screens.
 - **Background particles**: Subtle cyan snow-like particles floating across the full hero background (`HeroParticles.tsx`), respecting `prefers-reduced-motion`.
+- ** frontend dependencies**: Updated `lucide-react` from `^1.73.0` to `^1.83.0` in `package.json` and `package-lock.json`.
+- **Frontend component updates**:
+  - `frontend/components/home/HomeSections.tsx`: Added `ShowcaseGallery` component import and rendering.
+## Recent changes
+
+- **CMS-managed homepage**: All 11 homepage sections (Hero through the closing banner) are now loaded from a single Strapi `Homepage` type, with built-in fallbacks that match the original design.
+- **CMS-managed navbar and footer**: Both are loaded from Strapi (single types `Navbar` and `Footer`) with built-in fallbacks, replacing the hardcoded content.
+- **Response glitches**: Removed a duplicate idle-greeting loop that was fighting the active response loop, fixing flashing, early disappearance, and mixed default/chat responses.
+- **Mobile responsiveness**: Compact orb height on mobile (`h-[300px]`), minimum orb height floor, proper chat panel padding, and a max-height chat card with scroll on small screens.
+- **Background particles**: Subtle cyan snow-like particles floating across the full hero background (`HeroParticles.tsx`), respecting `prefers-reduced-motion`.
+- ** frontend dependencies**: Updated `lucide-react` from `^1.73.0` to `^1.83.0` in `package.json` and `package-lock.json`.
+- **Frontend component updates**:
+  - `frontend/components/home/HomeSections.tsx`: Added `ShowcaseGallery` component import and rendering.
+  - `frontend/components/home/MatrixRain.tsx`: Optimized GLYPH_LIST to use unique characters only via `new Set()`.
+  - `frontend/app/globals.css`: Added trailing newline at end of file.
+- **New untracked files/directories**: `frontend/app/demos/`, `frontend/components/showcase/`, `frontend/lib/showcase.ts`, `frontend/public/models/geometry_texture_effect_spheres.glb`.
+  - `frontend/components/home/MatrixRain.tsx`: Optimized GLYPH_LIST to use unique characters only via `new Set()`.
+  - `frontend/app/globals.css`: Added trailing newline at end of file.
+- **New untracked files/directories**: `frontend/app/demos/`, `frontend/components/showcase/`, `frontend/lib/showcase.ts`, `frontend/public/models/geometry_texture_effect_spheres.glb`.
 
 ## Troubleshooting
 

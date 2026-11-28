@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -21,8 +20,15 @@ const GLYPH_CHARS =
   "AZOYTRIXCODEWEBANDROID" +
   "APIJSONHTTPHTTPS";
 
-const GLYPH_LIST = Array.from(GLYPH_CHARS);
+// Unique glyphs only: the atlas needs each character once
+const GLYPH_LIST = Array.from(new Set(Array.from(GLYPH_CHARS)));
+
 const CELL = 64;
+
+// Atlas is a grid (not one long row) so it never exceeds GPU texture limits.
+// 16 columns x 64px = 1024px wide, well under the 4096px mobile minimum.
+const ATLAS_COLS = 16;
+const ATLAS_ROWS = Math.ceil(GLYPH_LIST.length / ATLAS_COLS);
 
 export default function MatrixRain() {
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -47,24 +53,24 @@ export default function MatrixRain() {
 
   // Initialize Three.js
   useEffect(() => {
-   const containerRef = ref.current;
+    const containerRef = ref.current;
+    if (!containerRef) return;
 
-if (!containerRef) return;
+    const container: HTMLDivElement = containerRef;
+    const canvas = document.createElement("canvas");
 
-const container: HTMLDivElement = containerRef;
-const canvas = document.createElement("canvas");
+    container.innerHTML = "";
 
-container.innerHTML = "";
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
+    canvas.style.display = "block";
 
-canvas.style.width = "100%";
-canvas.style.height = "100%";
-canvas.style.display = "block";
+    container.appendChild(canvas);
 
-container.appendChild(canvas);
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-  const w = container.clientWidth;
-  const h = container.clientHeight;
+    const w = container.clientWidth;
+    const h = container.clientHeight;
 
     // Three.js declarations
     const renderer = new THREE.WebGLRenderer({
@@ -79,15 +85,13 @@ container.appendChild(canvas);
 
     const scene = new THREE.Scene();
 
-    const camera = new THREE.OrthographicCamera(
-      -1, 1, 1, -1, 0, 1
-    );
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-    // Build glyph atlas
+    // Build glyph atlas (grid layout)
     const atlas = document.createElement("canvas");
 
-    atlas.width = CELL * GLYPH_LIST.length;
-    atlas.height = CELL;
+    atlas.width = CELL * ATLAS_COLS;
+    atlas.height = CELL * ATLAS_ROWS;
 
     const actx = atlas.getContext("2d");
 
@@ -102,8 +106,11 @@ container.appendChild(canvas);
     actx.textBaseline = "middle";
 
     GLYPH_LIST.forEach((ch, i) => {
+      const col = i % ATLAS_COLS;
+      const row = Math.floor(i / ATLAS_COLS);
+
       actx.save();
-      actx.translate(i * CELL + CELL / 2, CELL / 2);
+      actx.translate(col * CELL + CELL / 2, row * CELL + CELL / 2);
       actx.fillText(ch, 0, 2);
       actx.restore();
     });
@@ -120,6 +127,8 @@ container.appendChild(canvas);
 
       uniform float uTime;
       uniform float uGlyphs;
+      uniform float uCols;
+      uniform float uRows;
       uniform float uScale;
 
       uniform vec2 uRes;
@@ -195,13 +204,17 @@ container.appendChild(canvas);
           step(0.0, gf.y) *
           step(gf.y, 1.0);
 
-        float a = texture2D(
-          uAtlas,
-          vec2(
-            (idx + clamp(gf.x, 0.0, 1.0)) / uGlyphs,
-            clamp(gf.y, 0.0, 1.0)
-          )
-        ).r * inside;
+        // Glyph position inside the grid atlas.
+        // Canvas row 0 is the TOP of the texture, so flip the row.
+        float gcol = mod(idx, uCols);
+        float grow = floor(idx / uCols);
+
+        vec2 guv = vec2(
+          (gcol + clamp(gf.x, 0.0, 1.0)) / uCols,
+          (uRows - 1.0 - grow + clamp(gf.y, 0.0, 1.0)) / uRows
+        );
+
+        float a = texture2D(uAtlas, guv).r * inside;
 
         float trail = pow(1.0 - d / len, 1.7);
 
@@ -272,17 +285,14 @@ container.appendChild(canvas);
         uTime: { value: 0 },
 
         uRes: {
-          value: new THREE.Vector2(
-            w * dpr,
-            h * dpr
-          ),
+          value: new THREE.Vector2(w * dpr, h * dpr),
         },
 
         uAtlas: { value: texture },
 
-        uGlyphs: {
-          value: GLYPH_LIST.length,
-        },
+        uGlyphs: { value: GLYPH_LIST.length },
+        uCols: { value: ATLAS_COLS },
+        uRows: { value: ATLAS_ROWS },
 
         uMouse: {
           value: new THREE.Vector2(0.5, 0.5),
@@ -313,10 +323,7 @@ container.appendChild(canvas);
 
     // Resize handler
     function resize() {
-      const dpr2 = Math.min(
-        window.devicePixelRatio || 1,
-        2
-      );
+      const dpr2 = Math.min(window.devicePixelRatio || 1, 2);
 
       const w2 = container.clientWidth;
       const h2 = container.clientHeight;
@@ -324,10 +331,7 @@ container.appendChild(canvas);
       renderer.setPixelRatio(dpr2);
       renderer.setSize(w2, h2, false);
 
-      uniforms.uRes.value.set(
-        w2 * dpr2,
-        h2 * dpr2
-      );
+      uniforms.uRes.value.set(w2 * dpr2, h2 * dpr2);
 
       uniforms.uScale.value = dpr2;
     }
@@ -344,15 +348,12 @@ container.appendChild(canvas);
       );
     }
 
-    window.addEventListener(
-      "pointermove",
-      handlePointerMove,
-      { passive: true }
-    );
+    window.addEventListener("pointermove", handlePointerMove, {
+      passive: true,
+    });
 
-    // Animation loop
-    const clock = new THREE.Clock();
-
+    // Animation loop (own delta timer; THREE.Clock is deprecated)
+    let last = performance.now();
     let raf = 0;
     let disposed = false;
 
@@ -361,10 +362,9 @@ container.appendChild(canvas);
 
       raf = requestAnimationFrame(frame);
 
-      uniforms.uTime.value += Math.min(
-        clock.getDelta(),
-        0.05
-      );
+      const now = performance.now();
+      uniforms.uTime.value += Math.min((now - last) / 1000, 0.05);
+      last = now;
 
       uniforms.uMouse.value.lerp(target, 0.05);
 
@@ -376,7 +376,7 @@ container.appendChild(canvas);
       cancelAnimationFrame(raf);
 
       if (!document.hidden && !reducedMotion) {
-        clock.getDelta();
+        last = performance.now(); // skip the time spent hidden
         frame();
       }
     }
@@ -388,10 +388,7 @@ container.appendChild(canvas);
       passive: true,
     });
 
-    document.addEventListener(
-      "visibilitychange",
-      handleVisibilityChange
-    );
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     if (reducedMotion) {
       uniforms.uTime.value = 12;
@@ -408,15 +405,9 @@ container.appendChild(canvas);
 
       window.removeEventListener("resize", resize);
 
-      document.removeEventListener(
-        "visibilitychange",
-        handleVisibilityChange
-      );
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
 
-      window.removeEventListener(
-        "pointermove",
-        handlePointerMove
-      );
+      window.removeEventListener("pointermove", handlePointerMove);
 
       geometry.dispose();
       material.dispose();
@@ -427,25 +418,16 @@ container.appendChild(canvas);
         container.removeChild(canvas);
       }
     };
-
   }, [reducedMotion]);
 
-  
-return (
-  <section className="relative h-screen min-h-[600px] w-full overflow-hidden bg-black">
-
+  return (
+    <section className="relative h-screen min-h-[600px] w-full overflow-hidden bg-black">
       {/* Matrix Rain Background */}
-      <div
-        ref={ref}
-        aria-hidden="true"
-        className="absolute inset-0 z-0"
-      />
+      <div ref={ref} aria-hidden="true" className="absolute inset-0 z-0" />
 
       {/* Hero Content */}
       <div className="relative z-10 flex h-full items-center justify-center px-6 text-center">
-
         <div className="mx-auto max-w-4xl">
-
           {/* Eyebrow */}
           <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-5 py-2 text-xs font-medium uppercase tracking-[0.3em] text-cyan-300">
             <span className="h-2 w-2 animate-pulse rounded-full bg-cyan-400" />
@@ -471,7 +453,6 @@ return (
 
           {/* Actions */}
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-
             <a
               href="/about"
               className="rounded-full border border-cyan-300/50 bg-cyan-400/10 px-8 py-4 text-sm font-semibold text-cyan-200 backdrop-blur-md transition duration-300 hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_30px_rgba(34,211,238,0.35)]"
@@ -485,17 +466,13 @@ return (
             >
               Discover more
             </a>
-
           </div>
-
         </div>
       </div>
 
       {/* System Status */}
       <div className="absolute bottom-8 left-0 z-10 w-full px-6">
-
         <div className="mx-auto flex max-w-7xl items-center justify-between border-t border-cyan-400/20 pt-5">
-
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-cyan-300/80">
             <span className="h-2 w-2 animate-pulse rounded-full bg-green-400" />
             System online
@@ -504,12 +481,8 @@ return (
           <div className="text-xs uppercase tracking-[0.2em] text-slate-500">
             Reality loading // 001
           </div>
-
         </div>
-
       </div>
-
     </section>
   );
-
 }
