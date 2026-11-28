@@ -535,10 +535,10 @@ export default function DemoExperience({ project }: Props) {
           </div>
 
           <footer className="demo-footer">
-            <span>© {new Date().getFullYear()} AZOYTRIX</span>
+            <span>© 2026 AZOYTRIX</span>
             <span>ENGINEERING THE NEXT ERA.</span>
             <Link href="/#showcase">Explore more experiences</Link>
-          </footer>
+        </footer>
         </section>
       </div>
 
