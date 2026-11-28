@@ -13,7 +13,7 @@ import PortfolioHighlights from "@/components/home/PortfolioHighlights";
 import Stats from "@/components/home/Stats";
 import Principles from "@/components/home/Principles";
 import CtaStrip from "@/components/home/CtaStrip";
-
+import ShowcaseGallery from "@/components/showcase/ShowcaseGallery";
 /**
  * Loads the homepage content from Strapi once and passes each section its own slice.
  * Section order is defined here.
@@ -35,6 +35,7 @@ export default function HomeSections() {
       <Stats content={config.stats} />
       <Principles content={config.principles} />
       <CtaStrip content={config.cta} />
+      <ShowcaseGallery />
     </>
   );
 }
